@@ -272,27 +272,27 @@ $\ Bruit$ $\ de$ $\ fond|_{AFTE}=$ $\ Stries$ $\ horizontales$ $\ sembres$ $\ et
 
 
 ```{r LEA1, fig.cap= "des stries claires et de la texture dans une impression de champs",  echo=FALSE}
-knitr::include_graphics(path = "stries netes.png")
+knitr::include_graphics(path = "images/stries_netes.png")
 ```
 
 
 ```{r LEA2, fig.cap= "Stries claires melangées avec la texture", echo=FALSE}
-knitr::include_graphics(path = "stries et textures directionnelles1.png")
+knitr::include_graphics(path = "images/stries_et_textures_directionnelles1.png")
 ```
 
 
 ```{r LEA3, fig.cap= "Stries claires et texture directionnelle", echo=FALSE}
-knitr::include_graphics(path = "textures directionnelles.png")
+knitr::include_graphics(path = "images/textures_directionnelles.png")
 ```
 
 
 ```{r LEA4, fig.cap= "Stries claires noyées dans la texture", echo=FALSE}
-knitr::include_graphics(path = "stries noyes dans la texture.png")
+knitr::include_graphics(path = "images/stries_noyes_dans_la_texture.png")
 ```
 
 
 ```{r LEA5, fig.cap= "Omnipresence de la texture directionnelle et non directionnelles", echo=FALSE}
-knitr::include_graphics(path = "tres peu stries.png")
+knitr::include_graphics(path = "images/tres_peu_stries.png")
 ```
 
 La figure \ref{fig:LEA1} est un exemple pour l'omniprésence des stries sur toute l'impression de champs. La figure \ref{fig:LEA2} donne un exemple ou les stries sont noyées dans la texture. les figures \ref{fig:LEA3} et \ref{fig:LEA4} illustrent les textures directionnelles. La figure  \ref{fig:LEA5} est un exemple de la dominance des textures directionnelles et non directionnelles  au détriment des stries conventionnelles.
@@ -387,7 +387,7 @@ Afin d’éliminer les formes verticales, car a priori ,elles ne proviennent pas
 
 
 ```{r decomwave, fig.cap= "dcomposition à 1 niveau de l'image par ondelettes 2D à ces 4 composantes", out.width="550pt",  fig.align = 'center', echo=FALSE}
-knitr::include_graphics(path = "texture image after decompostion.png")
+knitr::include_graphics(path = "images/texture_image_after_decompostion.png")
 ```
 
 \newpage
