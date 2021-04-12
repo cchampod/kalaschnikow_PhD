@@ -1,0 +1,396 @@
+---
+title: "L’ÉVALUATION D’UNE NOUVELLE DÉFINITION DE L’IDENTIFICATION AUTOMATIQUE DE PROJECTILES SOUS UNE APPROCHE DE RAPPORT DE VRAISEMBLANCE            Mémoire"
+
+       
+author: "Hassen Djadja"
+output:
+  rmarkdown::pdf_document
+bibliography: book.bib
+
+
+             
+---
+
+```{r, echo=FALSE}
+library(cowplot)
+library(ggplot2)
+```
+
+\newpage
+
+# Introduction 
+
+## Contexte du travail
+
+Chaque tir par arme à feu à canon rayé laisse des traces sur la douille et le projectile de la munition utilisée. Dans une affaire criminelle liée à l’utilisation d’armes à feu, le tribunal pose généralement les questions suivantes : 1- combien d’armes ont été utilisées dans le tir d’indices matériels (douilles et projectiles) récupérés de la scène de crime ? 2- Est-ce que ces armes ont été utilisées dans le tir d’indices relatifs à une autre affaire criminelle ?  3- Est-ce qu’une arme suspecte saisie a tiré l’un des indices récupérés de la scène de crime ?
+
+Afin de répondre à ces questions purement techniques, le tribunal réquisitionne systématiquement un laboratoire de criminalistique dans le but d’effectuer des examens techniques sur les indices balistiques récupérés.
+
+Pour les deux premières questions, le spécialiste en identification balistique confronte le cas « **indice-indice **» pour conclure (ou non) que ces deux indices ont été tirés par une seule arme inconnue. Quant à la dernière question, le spécialiste va faire face au cas « **indice-source** », afin de conclure (ou non) que cette source (l’arme suspecte) a tiré l’indice.
+
+Les conclusions du spécialiste dans le cas « **indice-indice** » se basent sur la comparaison entre les traces trouvées sur les deux indices. Par contre pour le cas « **indice-source** » les conclusions du spécialiste se basent sur la comparaison entre les traces trouvées sur l’indice et les échantillons issus des tirs de référence effectués par l’arme suspecte.
+
+Selon la littérature [@RN2070], les traces laissées par une arme sur un indice sont classées dans trois catégories, à savoir, les caractéristiques de classe, les caractéristiques de sous classe et les caractéristiques individuelles. Le degré de ressemblance au niveau des caractéristiques dites individuelles est décisif pour conclure (ou exclure) une identification entre deux indices, ou entre un indice et une arme suspecte. Mise à part l’approche de stries consécutives concordantes (Consecutive Matching Striae) [@RN8606], qui a tenté de fixer un seuil de ressemblance nécessaire pour conclure une identification, aucun seuil de ressemblance n’a été proposé. Chose qui rend les résultats de l’expertise balistique purement subjectifs, car le spécialiste en matière se base uniquement sur sa formation, ces connaissances acquises et son expérience personnelle.  
+
+Étant donné  la non-reproductibilité des traces balistiques d’une part et la subjectivité qui entâche les conclusions résultantes d’une expertise balistique d’une autre part, l’identification balistique a subi ces dernières années plusieurs critiques par la communauté académique, telles que l’article de Schwartz [@RN8356], Ballistic Imaging [@RN5823], et les rapports [@RN6028] [@RN9741], générant dans plusieurs cas des problèmes d’admissibilité des rapports d’expertise balistique devant les tribunaux. 
+Afin de renforcer cette admissibilité, plusieurs études ont été réalisées dans le but de donner plus d’objectivité à cette discipline criminalistique, en se basant toujours sur les définitions de l’AFTE des traces laissées par une arme sur les indices balistiques. 
+
+## Buts du travail 
+
+L’objectif de ce travail est de contribuer efficacement dans la consolidation de l’admissibilité de la discipline de l’identification des armes à feu en général et l’identification des projectiles en particulier. Dans cette optique, ce travail de recherche tente d’atteindre les buts suivants :
+
+
+1.	Proposer une nouvelle définition de l’empreinte balistique trouvée sur un projectile, à travers une réflexion vérifiée par des constatations pratiques ;
+2.	Proposer une nouvelle approche pour l’identification des projectiles  sur la base de l’ossature de la théorie d’identification de l’AFTE, et la nouvelle définition proposée de l’empreinte balistique ;
+3.	Mettre en place un système d’identification automatique capable de :
+  . extraire l’empreinte balistique conformément à la nouvelle définition proposée ; 
+  . modéliser les rayures et les canons par le biais des techniques de modélisation par apprentissage automatique ;
+  .	évaluer numériquement la comparaison entre un projectile et les modèles d’armes potentielles d’une base de données, ou entre un fragment de projectile et les modèles de rayures potentielles d’une base de données ; 
+  .	évaluer numériquement la comparaison entre deux projectiles ; 
+4.	Mesurer l’évolution de l’intravariabilité de l’empreinte balistique d’un canon au fil du temps ;
+5.	Mesurer l’éventuel changement de l’intervariabilité de l’empreinte balistique sous l’effet de la présence, dans la base de données, d’un groupe d’armes, dont les canons ont été rayés consécutivement ;
+6.	Évaluer les résultats de la comparaison automatique entre un projectile (ou un fragment de projectile) et le modèle d’une arme suspecte, par un rapport de vraisemblance dans le cas général, et par un rapport de vraisemblance étendu dans le cas de présence d’un groupe d’armes, dont les canons ont été rayés consécutivement avec le canon de l’arme suspecte. 
+
+## Pland du document
+
+Le présent document est subdivisé en trois parties. La première est consacrée au cadre criminalistique en matière d’identification balistique en général et l’identification de projectiles en particulier, aux critiques qu’a subi ce domaine ; Les travaux de recherche réalisés dans l’automatisation de l’identification de projectile et les systèmes automatiques actuels d’identification balistique. La deuxième partie est dédiée aux exposés de motifs pour la nouvelle définition proposée de l’empreinte balistique ; L’approche relative à l’identification balistique ; Les algorithmes développés pour l’extraction de l’empreinte balistique dans sa nouvelle définition ; La modélisation d’une arme à feu, ainsi que l’identification automatique entre un projectile et une arme ou entre deux projectiles. Finalement, la troisième partie détaille le mode d’acquisition de projectiles, le choix des armes et l’échantillonnage, les tests de performance du système proposé, le calcul du rapport de vraisemblance dans le cas général et dans le cas de présence d’un groupe constitué par des armes dont les canons ont été rayés consécutivement avec l’arme suspecte. À la conclusion de cette partie, des hypothèses relatives à l’évolution de l’intravariabilité et l’intervariabilité au fil du temps pour les types d’armes choisies sont présentées.
+
+# Contexte théorique
+
+## 	Cadre criminalistique
+
+### Origine des traces sur un projectile récupéré dans une affaire criminelle
+Chaque projectile récupéré dans le cadre d’une affaire criminelle peut porter sur lui des traces liées à son contact avec des objets plus durs que sa surface, telles que les traces laissées lors :
+-	du sertissage de la cartouche ;
+-	du remplissage et vidage du chargeur ou magasin ;
+-	du tir avec un revolver ayant un mauvais alignement de l’âme du canon avec le barillet ; 
+-	de son passage dans le canon ;
+-	des ricochets ;
+-	du son passage d’un obstacle ;
+-	de l’impact avec la cible finale ;
+
+### Traces laissées par le canon sur un projectile
+
+Afin de donner plus de précision au tir et d’assurer un transfer maximal de l’énergie de la combustion de la poudre au projectile, le canon doit avoir des rayures et un diamètre intérieur légèrement inférieur de celui du projectile. À cause de la présence de ces rayures et la différence de diamètre entre le projectile et la lumière du canon, les champs et les rayures de ce dernier enlèvent la matière de surface du projectile. Cet enlèvement est plus profond par les champs que par les rayures. Les traces laissées par les rayures et les champs du canon sont appelées respectivement les impressions de champs et les impressions de rayures.
+
+L’association des experts en traces d’outils et en armes à feu « *Association of Firearms and Toolmarks Examiners* » a subdivisé les caractéristiques (traces) dans trois catégories. Les caractéristiques de classe, individuelles et de sous-classe. 
+
+#### Caractéristiques de classe (*ou issues de la fabrication*)
+
+« *Measurable feature of a specimen that indicate a restricted group source; they result from design factors, and therefore determined prior to manufacture* ». Il s'agit de caractéristiques communes à tous les outils de même type. Dans le cas de projectile, lors du tir, la température et la pression engendrée par l'inflammation de la poudre, provoquent l'expansion des gaz et le projectile est propulsé au travers du canon. Durant ce processus, les caractéristiques de fabrication d’une arme laissées sur un projectile sont les suivantes : le nombre d'impressions des champs, la largeur d’impressions des champs, le pas et le sens de rotation des impressions des champs.
+
+#### 	Caractéristiques individuelles
+
+« *Are imperfections or irregularities produced accidentally during manufacture or caused by use, abuse, corrosion, rust, or damage to an object. They are unique to that object and distinguish it from all other objects* ». Ces caractéristiques peuvent être, soit permanentes soit non permanentes. Il peut y avoir une évolution de ce type de caractères avec le temps et la fréquence d'utilisation. Ce sont généralement les stries dans les impressions des champs et les impressions des rayures.
+
+Après la fabrication du canon, les caractéristiques descriminantes qui se présentent à son intérieur changent avec le temps [@RN99999]. Ces changements sont dus essentiellement à la corrosion, à l’érosion et à d’autres facteurs et ils s’installent de manière aléatoire et ils sont particuliers pour chaque canon. La qualité et la quantité des traces laissées par les outils sur les surfaces sont dépendant de quatre facteurs : la dureté relative entre l’outil et la surface, le caractère de la surface d’outil, l’ampleur de la pression de l’outil sur la surface et le mouvement relatif entre l’outil et la surface. Parmi ces facteurs, le caractère de la surface la plus dure ou le canon est considéré comme constant. La dureté relative dépend considérablement de la surface de projectile et il a été souvent constaté des variations de dureté entre les projectiles du même lot. L’intensité de la pression entre le canon et le projectile dépend aussi de la charge propulsive de la cartouche et qui peut se varier d’un projectile à l’autre du même lot.  L’intensité de la pression change considérablement si on utilise des projectiles sous- calibrés ou sur calibrés, ce qui implique des stries plus profondes ou des stries superficielles. D’où la présence de certaines stries sur un projectile et leur absence sur d’autres projectiles, tirés par la même arme [@RN10645]. Par contre, Lindsay [@RN99998] a constaté que la diminution de 50% de la charge propulsive n’influence pas la capacité d'un expert à proceder à l’identification.
+
+#### Caractéristiques de sous classe
+
+« *Are surface features that are more restrictive than class characteristics, are produced incidental to manufacture, relate to a smaller group source, and can arise from a source that changes over time* ». Ce genre de caractéristiques n'est pas intentionnel, mais n'est pas non plus unique à un seul outil. Ces caractéristiques se forment lors du processus de fabrication d'un ordre qui possédant des similarités en apparence. Jusqu’aux nos jours, il n’y a pas un moyen pour distinguer les caractéristiques de sous classe des caractéristiques individuelles. 
+ [@RN99997] a constaté la présence de traces de sous-classe sur 1000 canons différents. [@RN99996] a également constaté la présence des traces de sous-classe sous forme de lignes grossières et des lignes fines.
+
+## Approches d’identification de projectiles
+
+Dans le contexte criminalistique, et plus particulierement en armes à feu, le terme identification est utilisé afin d’exprimer la relation entre une trace et un objet, comme étant la cause de la présence de cette trace, à l'exclusion de tous les objets potentiels. Ces derniers sont sélectionnés à la base des caractéristiques de classe mesurées sur la trace indiciaire. L’identification se fait à la base de la comparaison entre les caractéristiques dites individuelles révélées sur la trace indiciaire et celles révélées sur les traces de comparaison. Il est utile de signaler que le mot identification signifie la connaissance de la composition physique d’une matière. Mais, par abus d’usage, le mot identification signifie l’individualisation d’un objet comme étant la seule source d’une trace.
+Dans le domaine de l’expertise d’arme à feu et traces d’outils, il y a trois approches utilisées dans l’identification. La première est l’approche classique qui utilise l’échelle de la théorie d’identification du comité de l’AFTE. La deuxième utilise le seuil des stries consécutives concordantes CMS. La dernière utilise le rapport de vraisemblance.
+
+### Approche d’identification de l’AFTE
+
+C’est l’approche la plus ancienne et la plus utilisée par les experts en matière d’identification des outils et les armes à feu. Dans cette théorie, l’expert permet d'aboutir après la comparaison entre la pièce indiciaire et la pièce de comparaison,permet d'aboutir à l’une des quatre conclusions [@RN2070]. Le critère le plus important dans cette approche est le degré de compatibilité dans les caractéristiques individuelles entre les surfaces de deux indices (étant entendu une correspondance des caractéristiques de classe) 
+
+- **Identification** : compatibilité dans la combinaison des caractéristiques individuelles et toutes les caractéristiques de classe, dont le degré de compatibilité est supérieur de celui de la meilleure compatibilité   peut-être présente dans la comparaison entre deux traces laissées par deux outils différents, et cohérent avec la compatibilité observée entre deux traces laissées par le même outil.   « *Agreement of a combination of individual characteristics and all discernible class characteristics where the extent of agreement exceeds that which can occur in the comparison of tool marks made by different tools and is consistent with the agreement demonstrated by toolmarks known have to been produced by the same tool* »
+
+
+- **Non conclusive** : il peut être prononcée dans l’un des trois cas :
+
+    1. quelques compatibilités observées au niveau des caractéristiques individuelles et des caractéristiques de classe, mais elles sont insuffisantes pour conclure à une identification.  « *Some agreement of individual characteristics and a discernable class characteristics, but insufficient for an identification* »
+
+    2. compatibilité dans toutes les caractéristiques de classe sans compatibilité ou incompatibilité au niveau des caractéristiques individuelles, à cause de l’absence, l’insuffisance ou le manque de la reproductibilité. « *Agreement of all discernible class characteristics without agreement or disagreement of individual characteristics due to an absence, insufficiency, or lack of reproducibility* » 
+
+    3. compatibilité dans toutes les caractéristiques de classe et des incompatibilités au niveau des caractéristiques individuelles, mais elles ne permettant pas une exclusion « *Agreement of all discernible class characteristics and disagreement of individual characteristics, but insufficient for an elimination* ».
+
+
+- **Exclusion** : incompatibilité significative dans les caractéristiques de classes et/ou les caractéristiques individuelles.  « *Significant disagreement of discernible class characteristics and/ or individuals characteristics* »
+
+
+- **Inadapté** : la pièce indiciaire n’est pas convenable pour la comparaison « *Unsuitable for comparison* »
+
+### Approche de 
+
+
+### Approche basée sur les CMS
+
+Cette approche a vu le jour après les travaux de recherche empiriques  [@RN99995], où il a conclu que le nombre des stries concordantes consécutives est plus significatif que le nombre total des stries concordantes ou le pourcentage des stries concordantes. Ainsi, il  conclut qu’il peut utiliser le nombre des stries concordantes consécutives comme un moyen d’identification dans la comparaison entre les projectiles.
+Biasotti et Murdock [@RN9467] ont proposé des seuils numériques selon la morphologie des stries, pour l’identification dans le domaine des traces d’outils et des armes à feu .
+
+
+Dans le cas des traces tridimensionnelles, et avec l’écartement de l’influence des caractéristiques de sous classe, il faut avoir au moins la présence dans la même position relative, de deux groupes différents dans lesquels il y a au moins trois stries concordantes consécutives, ou la présence d’un groupe de six stries concordantes consécutives, dans la comparaison entre la trace d’outil indiciaire et la trace d’outil de comparaison. « *In three dimensional toolmarks when at least two different groups of at least three consecutive matching striae appear in the same relative position, or one group of six consecutive matching striae are in agreement in an evidence toolmark compared to a test toolmark. This is predicated on the understanding that all subclass influence has been ruled out* ».
+
+
+Dans le cas des traces bidimensionnelles, et en excluant de l’influence des caractéristiques de sous classe,  il faut avoir au moins la présence dans la même position relative, de deux groupes différents dans lesquels il y a au moins cinq stries concordantes consécutives, ou la présence d’un groupe de huit stries concordantes consécutives, dans la comparaison entre la trace d’outil indiciaire et la trace d’outil de comparaison. « *In two dimensional toolmarks when at least two different groups of at least five consecutive matching striae appear in the same relative position, or one group of eight consecutive matching striae are in agreement in an evidence toolmark compared to a test toolmark. This is predicated on the understanding that all subclass influence has been ruled out* ».
+
+### Approche du rapport de vraisemblance
+
+Le rapport de vraisemblance est une méthode d’évaluation de la trace matérielle liée à une affaire criminelle dans un contexte de raisonnement logique qui prend en compte les circonstances entourant l’affaire, afin de ne pas surestimer ou sous-estimer les résultats d’analyse de la trace.  Elle constitue un outil pour l’évaluation des croyances après l’analyse de la trace, à partir des croyances avant l’analyse de la trace, par le biais de l’évaluation des résultats de l’analyse de la trace.
+Dans une affaire criminelle, et après l’analyse de la trace, le juge et les jurés veulent savoir jusqu'à quel point l'arme à feu  a été la source de la trace. D’une autre façon, dans les cas de traces d’outils, ils veulent savoir la grandeur du rapport entre deux termes suivants. Le premier est la probabilité que l’outil soit la source de la trace en tenant en compte les résultats de l’analyse et les circonstances de l’affaire. Tandis que le deuxième est la probabilité que l’outil ne soit pas la source de la trace en tenant en compte les résultats de l’analyse et les circonstances de l’affaire. En désignant :
+
+
+$\ I$ : les circonstances de l’affaire 
+
+
+$\ E$ : les résultats de l’analyse ou les observations
+
+
+$\ H_{0}$ : l’hypothèse que l’outil est la source de la trace
+
+
+$\ H_{1}$ : l’hypothèse que l’outil n’est pas la source de la trace
+
+Le rapport entre les deux termes$\ P(H_{0} |E,I)$ et $\ P(H_{1} |E,I)$ s’appelle les chances à posteriori «*posterior odds* », tandis que le rapport entre les deux termes $\ P(H_{0} |I)$ et $\ P(H_{1} |I)$, s’appelle les chances à priori « *prior odds* ». 
+Selon le théorème de Bayes, il est possible de décrire la relation entre les rapports sous l’équation suivante :
+
+$\frac{P(H_{0} |E,I)}{P(H_{1} |E,I)}=$ $\frac{P(E|H_{0},I)}{P(E|H_{1},I)}$ $\frac{P(H_{0}|I)}{P(H_{1}|I)}$
+
+Le terme $\frac{P(E|H_{0},I)}{P(E|H_{1},I)}$ s’appelle le rapport de vraisemblance « *Likelihood Ratio*:$\ LR$  » en anglais. 
+
+Donc, ***les chances à postériori*** = $\ LR$  x ***les chances à priori*** [@RN4771].
+
+Dans le cas des armes à feu, $\ H_{0}$ est l’hypothèse que l’arme suspecte a tiré le projectile trouvé dans l’affaire criminelle et $\ H_{1}$ est l’hypothèse qu’une autre arme parmi le groupe d’armes potentielles a tiré ledit projectile.
+
+$\ P(E |H_{0},I)$ : la probabilité de faire les observations (concordances et discordances) durant la comparaison   entre le ledit projectile et les projectiles de comparaison tirés par l’arme suspecte sous l’hypothèse que ce projectile a été tiré par cette arme. Donc il représente l’intravariabilité de l’observation entre les projectiles tirés par l’arme suspecte. 
+
+$\ P(E |H_{1},I)$ : la probabilité de faire les observations (concordances et discordances) durant la comparaison entre ledit projectile et les projectiles de comparaison tirés par l’arme suspecte sous l’hypothèse que ce projectile a été tiré par une autre arme parmi le groupe d’armes potentielles. Donc, elle représente l’intervariabilité de l’observation dans les autres armes du groupe d’armes potentielles.
+
+Le $\ LR$  résume d’une façon élégante le résultat de l’examen en science forensique. Si le $\ LR$  est supérieur à 1, le résultat de la comparaison entre le projectile et du matériel de référence viendra à l’appui de l’hypothèse $\ H_{0}$ , tandis que, s’il est inférieur à 1, ce résultat viendra à l’appui de l’hypothèse $\ H_{1}$ . Par contre, si le LR est égal à 1, ce résultat n’est pas en faveur de l’une à l’autre des hypothèses considérées, chose qui rend la trace non pertinente vis-à-vis des propostion en examen
+
+## Critiques de la discipline balistique par la communauté académique 
+
+Comme été le cas pour les différentes disciplines de la criminalistique, le domaine de l’identification d’armes à feu a été dans l’obligation de s’adapter avec l’évolution des critères d’admissibilité de l’expertise scientifique devant les tribunaux.
+
+L’admissibilité de l’expertise scientifique aux États-Unis est passée par trois phases. La première, été avant 1923, durant laquelle est considéré comme expert celui qui gagne sa vie par la pratique de ses compétences. Ce critère repose sur le fait que la société dans cette époque estime que la réussite professionnelle est une condition suffisante pour prouver des compétences.  La deuxième phase a commencé en 1923, où le droit, par l’arrêt de Frye, a remplacé l’ancienne condition par une nouvelle exigence : l’expertise scientifique est admise si elle est basée sur des connaissances généralement admises par la communauté des spécialistes. La troisième phase a commencé dès 1993, date où la Cour suprême des États-Unis a rendu l’arrêt de Daubert. Cet arrêt a remplacé la condition des connaissances généralement admises posée par l’arrêt de Frye, par les quatre conditions d’admissibilité à savoir :
+
+1. la technique ou la théorie utilisée par l’expert a été (ou peut-être) testée, car une théorie est dite scientifique lorsqu’elle a l’aptitude de se soumettre à une expérience scientifique susceptible d’un résultat négatif ou positif ;
+
+2. la théorie ou la technique utilisée a donné lieu à une évaluation par les pairs et a fait l’objet d’une publication ;
+
+3. considérer le pourcentage d’erreurs potentiel ou connu dans l’application de la technique ou de la théorie ;
+
+4. la reconnaissance de la technique ou la théorie utilisée par la communauté scientifique.
+
+Après l’adoption de l’arrêt de Daubert, plusieurs voix ont contesté l’admissibilité de l’expertise balistique, mais les plus fameuses critiques sont celles émises par Adina Schwartz, le *National Research Council (NRC)* et le *President’s Council of Advisors on Science and Technology (PCAST)*.
+
+### Schwartz
+
+Dans ses  articles [@RN8356] [@RN3872], Schwartz a énuméré trois sources majeures qui peuvent causer une fausse identification, à savoir :   1) les caractéristiques individuelles sont composées de traces non uniques, 2) les caractéristiques de sous-classe et les caractéristiques individuelles sont indiscernables et 3) que ces dernières changent continuellement avec le temps. Dans le même contexte, Schwartz a fait ressortir les points suivants :
+
+- l’existence des différences entre les traces issues de la même source, et la possibilité d’observer des ressemblances entre les traces laissées par des sources différentes implique qu'il faut répondre à une question statistique pour déterminer si un outil particulier est à l’origine d'une trace ou non ;
+
+- l’absence d’études statistiques évaluant la probabilité qu’une caractéristique individuelle soit produite par un outil choisi aléatoirement ;
+
+- l’absence de tests de compétences adéquats dans le domaine de l’identification d’armes à feu et traces d’outils.
+Ces points ont été considérés par Schwartz, comme des arguments solides pour exclure l’admissibilité des rapports d’identification d’armes à feu et de traces d’outils devant la cour. 
+
+Afin de défendre l’admissibilité du domaine de l’identification d’armes à feu et de traces d’outils et de faire face aux critiques de Schwartz,  [@RN5455], s’est  appuyé sur les travaux de recherche empiriques réalisés dans les différents sujets critiqués par Schwartz, à savoir, le principe de l’identification, les caractéristiques de sous-classe, la variabilité des caractéristiques individuelles, et les tests de performance.  Pour minimiser l’aspect subjectif de la discipline, Nichols a souligné que les critères de l’identification sont à la fois subjectifs et objectifs. Car, pour lui, dans l’identification l’expert donne une interprétation subjective à ses objectives observations. Quant à la différence de la meilleure ressemblance entre les traces de différents outils (*Best-known nonmatch)* chez les différents experts, Nichols argumente que les tests de compétence montrent qu’elle est légère et insignifiante. 
+
+### Rapports du National Research Council
+
+Dans ces deux rapports publiés , le Conseil national de recherche, [@RN5823] [@RN6028], a évoqué les deux prémisses régissant le domaine de l’identification balistique, à savoir l’individualité et la reproductibilité des traces laissées par une arme à feu. En effet, selon les deux rapports, jusqu’à nos jours il n’y a aucune étude statistique qui a été réalisée à une grande échelle, pour vérifier l’impossibilité de la présence fortuite de similitude significative entre des traces laissées par deux armes différentes. De même, il n’y a aucune recherche   empirique qui a été effectuée afin de mesurer la stabilité de la reproductibilité des traces laissées par les différents types d’armes à feu.  Donc, outre la subjectivité de l’examen balistique et le manque de la vérification de ces deux prémisses, l’expert en identification balistique quand il conclut une identification, il la prononce avec une certitude absolue, chose qui fragilise l’admissibilité de l’identification des armes à feu devant les tribunaux. 
+
+### Rapport du President’s Council of Advisors on Science and Technology
+
+Outre les remarques révélées par les deux précédents rapports, le rapport du PCAST [@RN9741] a mis l’accent sur le problème du manque de tests de compétence fiables nécessaires pour estimer les taux d’erreur (fausses identifications et fausses exclusions) dans les conclusions des experts balistiques, car selon ce rapport il n’existe qu’une seule  étude  pertinente qui a été réalisée [@RN99994] par laquelle un taux d’erreur de 1 sur 66 a été enregistré dans un test de compétence distribué sur 218 experts en balistique.
+
+## Travaux de recherche effectués
+
+Afin de faire face au grand nombre d’affaires cumulées au niveau des laboratoires balistiques et de répondre aux requérants en temps opportun, il serait judicieux de penser à l’automatisation des différentes étapes du processus d’analyse, à savoir, la numérisation, la comparaison et l’interprétation. Mais, après l’adoption des critères   de Daubert de l’admissibilité des expertises forensiques devant les cours, et l’ampleur des critiques envers le domaine de l’identification des armes à feu et traces d’outils, il est indispensable que la communauté des chercheurs et spécialistes en balistique réalise des études et des recherches dans le but de minimiser au maximum la subjectivité de la discipline par l’automatisation des étapes de l’analyse balistique.
+
+Le tableau ci-dessous dresse les plus importants travaux de recherche effectués dans l’automatisation de l’identification de projectiles, les techniques d’acquisition et d’extraction de signatures, et les méthodes de comparaison. Il est utile de signaler que ces vingt-neuf (29) travaux de recherche sont subdivisés, selon les techniques d’acquisitions, en deux groupes (optique et non optique), et selon le type de données dans deux groupes (2D ou 3D). Ils sont aussi classés, selon les techniques d’extraction de signatures, en deux groupes (les différentes transformées : Hough, Fourrier, Radon et ondelettes, et les descripteurs de la texture). Ils sont également classés, selon les méthodes de comparaison, en trois groupes (comparaison directe par l’utilisation des fonctions de corrélation pour l’évaluation de la similarité, des fonctions de distance pour mesurer la dissemblance, ou par la modélisation par les techniques de l’apprentissage automatique).
+
+
+```{r out.height = "95%", out.width='100%',fig.cap="Techniques utilsées dans la literature pour l'acquisition, l'extraction de signature et la discrimination", echo=F}
+knitr::include_graphics( path = "diag_tech.pdf")
+```
+
+ \tiny
+
+  
+ 
+```{r table1, echo=FALSE}
+knitr::kable(
+  data.frame(
+    "Approches" = c("Computer Identification Of Bullets [@RN13548]","Criterion for Land Mark Identification [@RN8565]", "Feature extraction Of Optical Projectiles Images [@RN13547]", "Automated Firearms Evidence Comparison: A Forensic Tool for Firearms Identification—An Update [@RN1284]", "Surface Topology Of Bullet The User During Visualisation And Turn Out To Be Very Helpful Striations: An Innovating Technique [@RN13546]", "Automated comparisons of bullet striations based on 3D topography [@RN11004]","Visualisation By Confocal Microscopy Of Traces On Bullet and Cartridge Cases [@RN13545]" , "Automated analysis and comparison of striated toolmarks [@RN13544]", "Development Of A 3D-Based Automated Firearms Evidence Comparison System [@RN11010]" ,  "Three dimensional visualization and comparison of impressions on fired bullets [@RN11017]" ,  "NIST Bullet Signature Measurement System for RM (Refecrence Materiel) 8240 Bullets [@RN4987]" ,   "Toolmarks Identification Using SEM Images In An Opteolectronic Correlator Device [@RN755]" , "Correlation Of Topography Measurements Of NIST SRM 2460 Standard Bullets by four techniques [@RN13542]", "Automated comparison of firearm bullets [@RN13541]" , "Ballistics Projectile Image Analysis for Firearm Identiﬁcation [@RN13540]" , "Pilot Study Of Automated Bullet Signature Identification Based on Topography Measurements and Correlations [@RN13539]", "Striation Density For Predicting The Identifiability Of Fired Bullets With Automated Inspection Systems [@RN13536]" ,  "Similarity Measurement of Striation Marks Based Upon the Longest Common Subsequence Method [@RN13535]","Numerical Classification Of Curvilinear Structures For The Identification Of Pistol Barrels [@RN13534]",  "Comparison and Statistical Analysis Of Land Impression From Consecutively Rifled Barrels [@RN13533]" ,   "Texture Based Firearms Striations Analysis For Forensics Image Retrieval [@RN13532]" ,  "Proposed “NIST Ballistics Identification System (NBIS)” Based On  3D Topography Measurements On Correlation Cells [@@RN99988]",   "The Use Of Near-Infrared Photography To Image Fired Bullets And Cartridge Cases [@RN99989]",   "Automated Bullet Identification Based On Striation Feature Using 3D Laser Color Scanner [@RN99990]",  "Quantitative Comparison Of Striated toolmarks [@RN8460]",  "Adding An Objective Component To Routine Casework: Use Of Confocal Microscopy For The Analysis Of 9 mm Calibre Bullets [@RN99992]",   "Automatic Matching Of Bullet Lands [@RN99993]",    "A correlation Based Bullet Identification Method Using Empirical Mode Decomposition [@RN10917]","A Bayesian approach based on Kalman filter frameworks for bullet identification [@RN13128]" ),
+    "Acquisition"=c("Microscope électronique à balayage", "Non", "Image optique 2D","Non", "Profilomètre laser","Profilomètre laser", "Microscope laser confocale","Image optique 2D résultante par la fusion de deux images (éclairages directionnel et diffusé)", "Microscope confocal","Microscope confocal", "Profilomètre stylus","Microscope électronique à balayage", "Microscope interforemetre, Microscope confocal, Microscope confocal par balayage laser et Profilomètre stylus","Plusieurs Images optiques 2D prises sous différents angles d’éclairage", "Image optique 2D","Microscope confocal", "Microscope confocal","Image optique 2D","Image optique 2D", "Image optique 2D","Image optique 2D", "Microscope confocal","Image optique 2D, filtres et caméra infrarouges", "Scanner laser couleur 3D","Image 2D : Microscope optique et 	Topographie 3D : microscope à focus infini (Alicona)", "Microscope confocal","Microscope confocal", "Microscope optique", "Microscope optique"), 
+   "Extraction de signatures" =c("Calcul de la hauteur, largeur et position des stries","Non","Extraction des lignes par la transformée de Hough","Non","Non","Profile de la surface ","Non", "Vecteur de positions des sommets et creux","Vecteur de Profil de la surface","Topographie des impressions de champs","Profil de la surface et prétraitement par filtrage passe-haut","Transformée de Fourier de l’image 2 D et la conversion du résultat à un code à bar 1D","Topographie de la surface","Prétraitement par filtrage passe-bas; Fusion de plusieurs images afin de donner un contraste local maximal dans l’image finale; Filtrage passe-haut; 	Profile totale par la projection dans le sens des stries; L’obtention du vecteur descripteur par la suppression des structures grossières à l’aide de l’application des opérateurs morphologiques d’ouverture et de fermeture sur le profile totale","Prétraitement et extraction de contour par le filtre Sobel; Transformée de Fourier de l’image 2D résultante; Vecteur descripteur composé des valeurs du maximum, la moyenne, la médiane et l’écart-type des spectres radiaux angulaires de la transformée de Fourier de l’image traitée","Prétraitement par filtrage de la topographie de la surface; Sélection de la zone d’intérêt ayant une somme des résiduelles carrées minimale; Calcule du profil moyen de la zone d’intérêt","Suppression des points mal scannés et leur remplacement par interpolation; Suppression de hautes et basses fréquences par un filtre Gaussien; Suppression des structures grossières à l’aide de l’application des opérateurs morphologiques d’ouverture et de fermeture sur le profile totale; Détection de contours par le filtre de Canny; Calcul de densité de stries : proportion des pixels des stries par rapport à la taille de l’image","Détection de stries par l’application du filtre de Canny et l’opérateur morphologique de fermeture; Conversion des rubans de 20 pixels de largeur à des codes à barres; Codification des codes à barres par des lettres selon la distance entre les piques","Fusion de plusieurs images, prises à plusieurs plans, par la technique des ondelettes complexes; Binarisation de l’image résultante suivi par une réduction de a taille au moitie; Récupération du module de la transformée de Fourier de cette image et la suppression des hautes fréquences; Transformation de l’image module à un vecteur","Calcul manuel de la largeur et la position des stries horizontales à partir de la limite inférieure de l’impression du champ; Création d’un code à barres à partir des positions et largeurs de stries; Utilisation de la PCA pour le choix des variables principales","Calcul de la matrice de cooccurrences de niveaux de gris;  Calcul des 4 variables du vecteur descripteur :  l’homogénéité, le second moment angulaire, l’énergie et l’entropie", "Cadrage de la topographie  acquise dans une matrice de cellules carrées selon la technique appelée Contiguous Matching Cells (CMC) « entre 50 et 200 cellules par type de traces »","Non","Transformation linaire de l’image; Détection de contour par l’application de l’opérateur Robert; Squelettisation par l’application de l’algorithme de Hilditch; La sélection de 3 profils de contour, A, B et C (à 350, 400 et 450 pixels de hauteur)","Rotation de l’image afin d’aligner les stries avec l’axe horizontal; Débruitage par l’application du filtre Chebyshev; La valeur de chaque point du profil final de la trace d’outil égale à la moyenne des profils horizontaux; Application de l’analyse multi échelles à 4 niveaux sur le profil final","Assemblage des 5 images afin d’obtenir l’image de l’impression de champs; Décomposition du signal en 4 composants, à savoir la microrugosité, la rugosité, l’ondulation et la forme; Prendre en considération uniquement la rugosité et l’ondulation, par l’élimination de la microrugosité (par filtre Gaussian) et de la forme (par l’élimination des profile ayant la courbe de polynômes de 2ème degrés); La valeur de chaque point du profil de l’impression de champs égale à la moyenne des profils horizontaux","-Détection des bords des impressions de champs par le lissage des profils et les positions de minimas et maximas locaux des impressions de rayures; La signature du profil est obtenue par la suppression de la courbure par l’utilisation de la régression polynomiale","Détection de contour par l’opérateur de Canny; Calcul de l’angle d’inclinaison de l’impression de champs par l’utilisation de la transformée de Radon; Rotation de l’image par un angle opposé à l’angle d’inclinaison; La valeur de chaque point du profil de l’impression de champs égale à la moyenne des profils horizontaux; Décomposition du profil par la décomposition en mode empirique EMD (Empirical Mode Decomposition) en 9 niveaux; Le profilé final est formé par l’addition des 6 modes (du 3 au 8)", "Détection de contour par l’opérateur de Canny -	Calcul de l’angle d’inclinaison de l’impression de champs par l’utilisation de la transformée de Radon -	Rotation de l’image par un angle opposé à l’angle d’inclinaison -	La valeur de chaque point du profil de l’impression de champs égale à la moyenne des profils horizontaux -	Décomposition du profil par la décomposition en mode empirique EMD (Empirical Mode Decomposition) en 9 niveaux -	Le profilé final est formé par l’addition des 6 modes (du 3 au 8)" ),
+    "Discrimination"=c("Probabilité de concordance fortuite de n strie dans la comparaison entre 2 impressions de champs ou 2 impressions de rayure", "Oui","Corrélation entre les phases de la transformée de Fourier de deux signatures","Oui", "Non","Corrélation entre deux vecteurs (profils de surfaces)", "Non","Oui", "Corrélation entre deux vecteurs de profile de surfaces","Calcul de distance par l’alignement automatique entre deux surfaces","Fonction de corrélation croisée entre deux vecteurs de profile et la distance entre ces deux vecteurs", "Corrélation entre deux codes à bar","Fonction de corrélation croisée entre deux vecteurs de profile", "Fonction de corrélation croisée entre deux vecteurs de descripteurs","Non", "Fonction de corrélation croisée entre deux vecteurs de profil moyen","Fonction de corrélation croisée entre deux vecteurs de profil moyen","Similarité entre deux codes à barres par la méthode de la plus longue séquence commune (Longest Common Subsequence)", "Analyse par composantes principales afin de réduire la dimensionnalité des vecteurs et la distance euclidienne pondérée","Modélisation des des impressions de champs par  PCA et SVM", "Distance euclidienne entre les vecteurs descripteurs","Pour conclure une identification il faut avoir dans la comparaison au moins 6 CMC ou deux groupes, chacun a au moins 3 CMC, vérifiant les trois paramètres d’identification, à savoir : une corrélation maximale CCF ≥ 60%, les mêmes coordonnées (x, y) et les mêmes angles initiaux de recalage", "Non","-Distance minimale entre les 3 vecteurs de profiles pour deux projectiles puis la moyenne des 3 distances minimales","Corrélation croisée entres les 5 paires (profil final plus les 4 profils aux différentes échelles) pour les deux traces d’outils", "Fonction de corrélation croisée entre deux vecteurs de profil final","Lissage des deux signatures; Identification du bon alignement par l’utilisation de la fonction de corrélation croisée; Identification des positions des pics et vallées; Application de deux techniques l’apprentissage automatique : l’arbre décisionnel et forêt aléatoire  (Decision Trees ou Random Forest) sur les 7 caractéristiques trouvées dans la comparaison entre les deux signatures pour le : Calcule de CMS maximal, nombre des stries concordantes, et non concordantes, la valeur maximale de la fonction de corrélation croisée, la distance euclidienne entre les deux signatures et la somme des moyens de hauteurs des pics ou vallées", "-	Fonction de corrélation croisée entre deux vecteurs de profile final", "Fonction de corrélation circulaire  croisée  normalisée entre deux vecteurs de profile final"),
+"Échantillonnage"=c("13 projectiles tirés par 04 revolvers de calibre .38","01 pistolet de calibre .45 Colt (5 projectiles) et un pistolet de calibre .22 Colt (2 projectiles","01 pistolet de calibre 9 mm (02 projectiles)"," ","01 pistolet de calibre 9 mm (une impression de champs)","2 pistolets de caliber 9 mm (2 x 3 projectiles)","01 pistolet de calibre 9 mm (au moins 2 projectiles)", "6 outils (54 traces d’outils) ","3 pistolets de calibre 9 mm (2 projectiles par arme)","01 pistolet de calibre  .25 (2 projectiles) et un pistolet de calibre 7.65 mm (2 projectiles)","6 pistolets de calibre 9 mm (6 projectiles réels et 40 projectiles standards fabriqués à partir des signatures de ces 6 projectiles réels)","3 traces d’outil laissées par 01 seule pince","01  projectile standard","12 pistolets de calibre 9 mm (27 projectiles de test)", "8 pistolets de calibre 9 mm et 8 pistolets de calibre .22 LR","12 pistolets de calibre 9 mm (48 projectiles) ","12 pistolets de calibre 9 mm (48 projectiles)","12 tournevis","15 pistolets de calibre 9 mm 
+(1 moulage par canon)","10 pistolets de calibre 9 mm (35 projectiles avec au moins 3 projectiles de chaque arme)","10 images", "10 pistolets de calibre 9 mm (40 douilles, mais pas de projectiles)","5 pistolets et 1 revolver (4 projectiles)","3 pistolets (3 projectiles par armes à feu)","50 tournevis (moulage de traces d’outils laissées par ces tournevis sous différents angles)","10 pistolets de calibre 9 mm leurs canons ont été rayés consécutivement.(deux  projectiles par arme) ","10 pistolets de calibre 9 mm leurs canons ont été rayés consécutivement","90 fusils d'assult AK47 (2 projectiles par arme)", "90 fusils d'assult AK47 (2 projectiles par arme)"),
+"Remarque"= c(" ","La comparaison entre les stries de deux impressions de champs a été réalisée par l’analyse combinatoire et les CMS","La sélection de la région d’intérêt se fait manuellement"," "," "," ","Étude comparative entre le macroscope optique comparateur et le microscope laser confocale", " "," "," ","Uniquement l’étude de répétabilité et de reproductibilité de profile de surface dans l’usinage des 40 projectiles standards"," ","La faisabilité d’utilisé la technique d’acquisition de topographie de  surface comparaison entre les topographies de surface au lieu la comparaison optique","Une comparaison de performance a été effectuée entre le système proposé et celui d’IBIS Héritage. Une meilleure concentration de mesure (14.7%) pour le système proposé par rapport au système IBIS (27.2%)", " "," ","L’étude a démontré empiriquement le lien entre la densité des stries et la discrimination entre les projectiles tirés par la même arme de ceux tirés par armes différentes"," ","L’étude a démontré l’importance de l’exploitation des zones de transition entre les rayures et les champs d’un canon dans la discrimination entre les fabricants de canons"," "," ", " ","Aucune amélioration significative dans l’acquisition"," "," "," "," ","sensibilité de 70.49% pour les 10 meilleurs scores", "sensibilité de 73.22% pour les 10 meilleurs scores")), 
+  
+  caption = "Travaux de recherches effectués dans l’automatisation de l’identification de projectiles"
+)
+```
+
+\newpage
+
+
+
+\normalsize
+
+
+
+# contribution personnelle
+
+## Définition proposée de l’empreinte balistique 
+
+Comme dans toutes les traces glissées générées lors d’un mouvement parallèle entre un outil et la surface d’un objet, l’impression de champ se manifeste sous forme des stries parallèles au sens du mouvement du projectile dans le canon, guidé par les deux bords de champ. Pour un canon dont les rayures sont orientées vers la droite, le bord droit et le bord gauche communément appelés respectivement le bord d’attaque et le bord de fuite. Inversement, pour un canon dont les rayures sont orientées vers la gauche, le bord gauche et le bord droit communément appelés respectivement le bord d’attaque et le bord de fuite. Dans les deux cas de figure, les stries dans l’image de l’impression de champ sont plus au moins parallèles au bord d’attaque qu’au bord de fuite. 
+
+Dans sa définition actuelle, l’empreinte balistique d’une arme sur un projectile est représentée par l’ensemble des impressions de champs et de rayures du canon laissées sur la surface du projectile. Étant donné que généralement les champs laissent des traces plus prononcées et plus spécifiques que les rayures [Lomoro, 1972], les impressions de champs sont généralement suffisantes pour représenter cette empreinte.  
+
+D’après la théorie de l’identification de l’AFTE, la strie est la composante élémentaire de l’empreinte balistique et que cette dernière est composée par l’ensemble des stries parallèles observées dans les différentes impressions de champs.  
+
+Dans la comparaison, sous le macroscope comparateur, entre deux projectiles, inconnus ou l’un des deux est issu d’un tir de test, l’examinateur compare entre les impressions de champs des deux projectiles tout en cherchant la phase qui donne de meilleures concordances au niveau des stries horizontales. En utilisant ces concordances observées et à la base de sa formation et de son expérience, l’examinateur peut conclure, d’une manière subjective, une identification ou une exclusion. 
+
+Dans le cas d’une identification, l’examinateur argumente sa conclusion par des images de comparaison indiquant les stries claires horizontales concordantes observées. Donc, il est possible de dire qu’une impression de champs est une superposition  entre un $\ Premier$ $\ plan$ qui comporte l’information utile à l’identification, à savoir les stries claires horizontales (caractéristiques individuelles), et un $\ Arrière$ $\ plan$ qui englobe les données non pertinentes, à savoir la texture, qui est considérée comme un $\ bruit$ $\ de$ $\ fond$.
+
+
+
+Dont le $\ Premier$ $\ plan$ n'est rien d'autre que la signature balistique dans sa difinition actuelle de l'AFTE, à savoir les stries horizentales claires, étant donne que les stries sombres ne sont visible que sous un eclairage oposé, elles ne soient pas prises en compte.Tandis que   $\ l'Arrière$ $\ plan$ représente le reste de l'image de l'impression de champs, donc, l'information non pertinante vis à vis la difinition actuelle,qui se manifeste sous forme de $\ Textures$. 
+
+Les $\ Textures$ sont généralement composées de $\ Textures$ $\ directionnelles$ et de $\ Textures$ $\ non$ $\ directionnelles$. De leur tour, les $\ Textures$ $\ directionnelles$  sont composées des $\ Stries$ $\ horizontales$ $\ sombres$ et les $\ Textures$ $\ orientées$.
+
+De ce qui précède:
+
+$\ Impression$ $\ de$ $\ champ$ $\ =$ $\ Stries$ $\ horizontales$ $\ claires$ $\ et$ $\ Stries$ $\ horizontales$ $\ sembres$ $\ et$ $\ Textures$ $\ orientées$  $\ et$ $\ Textures$ $\ non$ $\ directionnelles$
+
+$\ Impression$ $\ de$ $\ champ$ $\ =$ $\ Signature$ $\ balistique|_{AFTE}$ $\ +$ $\ Bruit$ $\ de$ $\ fond|_{AFTE}$ 
+
+Où: $\ Signature$ $\ balistique|_{AFTE} =$\ $\ Stries$ $\ horizontales$ $\ claires$
+
+$\ Bruit$ $\ de$ $\ fond|_{AFTE}=$ $\ Stries$ $\ horizontales$ $\ sembres$ $\ et$ $\ Textures$ $\ orientées$  $\ et$ $\ Textures$ $\ non$ $\ directionnelles$
+
+
+
+```{r LEA1, fig.cap= "des stries claires et de la texture dans une impression de champs",  echo=FALSE}
+knitr::include_graphics(path = "stries netes.png")
+```
+
+
+```{r LEA2, fig.cap= "Stries claires melangées avec la texture", echo=FALSE}
+knitr::include_graphics(path = "stries et textures directionnelles1.png")
+```
+
+
+```{r LEA3, fig.cap= "Stries claires et texture directionnelle", echo=FALSE}
+knitr::include_graphics(path = "textures directionnelles.png")
+```
+
+
+```{r LEA4, fig.cap= "Stries claires noyées dans la texture", echo=FALSE}
+knitr::include_graphics(path = "stries noyes dans la texture.png")
+```
+
+
+```{r LEA5, fig.cap= "Omnipresence de la texture directionnelle et non directionnelles", echo=FALSE}
+knitr::include_graphics(path = "tres peu stries.png")
+```
+
+La figure \ref{fig:LEA1} est un exemple pour l'omniprésence des stries sur toute l'impression de champs. La figure \ref{fig:LEA2} donne un exemple ou les stries sont noyées dans la texture. les figures \ref{fig:LEA3} et \ref{fig:LEA4} illustrent les textures directionnelles. La figure  \ref{fig:LEA5} est un exemple de la dominance des textures directionnelles et non directionnelles  au détriment des stries conventionnelles.
+
+
+Il est utile de soulever les trois points suivants :
+
+- Selon l’angle d’éclairage, la strie peut être sombre ou claire, car la nuance perçue d’une strie n’est pas une caractéristique intrinsèque, mais elle dépend fortement de l’intensité et l’angle d’éclairage utilisés et elle ne reflète pas correctement la morphologie de la strie.
+
+- Il n’y a aucun moyen ou technique pour vérifier, si une strie donnée, observée dans une impression de champ, a été laissée par un champ, ou par d’autres surfaces rencontrées durant la trajectoire balistique ou avant le tir.
+
+- Dans une échelle d’observation donnée, les textures orientées sont dues principalement aux frottements du projectile avec d’autres surfaces (entre autres, les champs et les rayures du canon), et que les textures non-directionnelles représentent généralement l’état brut de la surface du projectile après son usinage.
+
+À partir de ce constat, le sousigné propose une nouvelle définition de l’empreinte balistique observée dans une impression de champ, comme étant l’ensemble de stries et des textures orientées, incluses entre les deux bords de l’impression de champs. L’ensemble de stries et des textures orientées sont dues aux différents contacts entre le projectile et d’autres objets (entre autres, le champ du canon).
+
+Donc, l’empreinte balistique dans sa nouvelle définition est le résultat de  la superposition des stries et des textures orientées laissées par le champ durant la balistique intérieure, et des stries et des textures orientées laissées par d’autres objets rencontrées  durant la balistique extérieure et la balistique finale, et éventuellement avant le le tir.  
+
+
+```{r tableau2, echo=FALSE}
+  tab<-data.frame(
+"Approches"=c("Théorie AFtE", "Approche proposée"),
+"Caractéristiques discriminantes"=c("Stries horizontales claires", "Stries horizontales claires; stries horizontales sombres; Textures orientées"),
+"Arrière-plan"=c("Stries horizontales sombres; Textures orientées; Textures non-directionnelles", "Textures non-directionnelles"))
+knitr::kable(tab, caption=" Comparaison de la définition des caractéristiques discriminantes sous la théorie de l'identification de l'AFTE et sous l'approche proposée\\label{tab:tabl3}", booktabs= TRUE)
+```
+
+
+
+Du tableau \ref{tab:tabl3}, il est clair que la signature balistique sous la définition proposée est plus pertinente que sous la définition actuelle, car cette dernière se contente de réduire la signature balistique (les caractéristiques dites individuelles) à l’ensemble des stries claires horizontales, sous le prétexte que la signature du champ est peut être représentée seulement par le groupe des stries claires horizontales, et que ces dernières sont dues uniquement au contact entre le champ et le projectile, ce qui n’est pas forcement correct ou vérifié. Par contre, sous la nouvelle définition, la signature balistique est mieux représentée, car elle regroupe les stries horizontales, sombres et claires, et les textures orientées (les textures directionnelles) qui sont plus invariantes par rapport à l’éclairage que les stries horizontales claires. Toutefois, il n’est pas possible de distinguer dans l’impression de champ, les textures directionnelles issues du contact entre le projectile et le champ, de celles issues du contact entre le projectile avec d’autres objets. Donc, il est avéré que, quel que soit la technique utilisée, optique ou non-optique, il n’est pas possible, à partir d’une seule acquisition, de discerner la signature balistique d’un champ, à savoir les stries et les textures orientées, des celles laissées par d’autres objets. Afin de réaliser cette distinction, le recours à l’apprentissage, humain ou automatique, est considéré comme l’une des meilleures solutions. Cette solution va être détaillée ultérieurement.
+
+## 	Approche proposée de l’identification balistique
+
+Comme cité supra, l’approche la plus ancienne et la plus utilisée dans l’identification est l’approche adoptée par l’AFTE en 1992. Dans cette approche, le seul critère utilisé dans l’identification ou l’exclusion est le degré de compatibilité, au niveau des caractéristiques individuelles, observée dans la comparaison entre deux indices. Dans le cas des projectiles, la compatibilité est observée au niveau des stries horizontales claires concordantes. Afin de déclarer une identification entre deux projectiles, outre la compatibilité au niveau de toutes les caractéristiques de classe, le degré de compatibilité, sous-entendu les concordances entre les stries horizontales claires, doit satisfaire les deux conditions suivantes : 
+
+-	Supérieur au meilleur degré de compatibilité observé, au niveau des caractéristiques individuelles, dans la comparaison entre les projectiles tirés par des armes différentes ;
+
+-	Cohérent avec la compatibilité observée, au niveau des caractéristiques individuelles, dans la comparaison entre les projectiles tirés par la même arme.  
+
+Du point de vue du soussigné, ces deux conditions sont parmi les causes principales de la vulnérabilité de la discipline de l’identification balistique et dans celles-ci réside la subjectivité qui entache cette discipline, car, dans le cas des projectiles il est facile de formuler les suivantes remarques :
+
+-	Il n’y a pas une définition précise pour mesurer le degré de compatibilité, donc, de concordance au niveau des stries horizontales claires. Est-ce que c’est le pourcentage des stries concordantes par rapport au nombre total des stries, ou c’est le nombre des stries concordantes ;
+
+-	Pour le même examinateur, au cours de son expérience professionnelle, le meilleur degré de compatibilité observé, au niveau des caractéristiques individuelles dans la comparaison entre les projectiles tirés par des armes différentes, se change et s’accroit. De ce fait, ce degré est variable dans le temps pour le même examinateur et il est différent d’un examinateur à l’autre, ce que le rend quasiment inutilisable par la communauté des examinateurs en balistique ;
+
+-	Idem pour la deuxième condition, car le degré de compatibilité observée, au niveau des caractéristiques individuelles, dans la comparaison entre les projectiles tirés par la même arme, évolue avec l’expérience professionnelle du même examinateur, et il est différent d’un examinateur à un autre, ce le rend en réalité inutilisable par la communauté des examinateurs en balistique ;
+
+-	D’après ces deux conditions, il est sous-entendu implicitement que le degré de compatibilité, observé dans la comparaison au niveau des caractéristiques individuelles, entre les projectiles tirés par la même arme est toujours supérieur à celui observé entre les projectiles tirés par des armes différentes. Cependant, il n’existe aucun argument logique ou des études statistiques pouvant justifier cette prémisse. Il est tout à fait possible de trouver un degré de concordance, soit en pourcentage ou en nombre, de stries dans la comparaison entre deux projectiles tirés par armés différentes, supérieur à celui trouvé dans la comparaison entre deux projectiles tirés par la même arme.  Idem pour les impressions de champs. Il est également possible de trouver un degré de concordance, soit en pourcentage ou en nombre, dans la comparaison entre les impressions de deux champs, supérieur à celui observé dans la comparaison entre deux impressions du même champ.
+
+En réalité, le calcul du degré de concordances entre les projectiles tirés par des armes différentes ou par les mêmes armes n’a jamais été fait. Pour cette raison, et afin de conclure une identification, l’examinateur n’utilise guère ces deux conditions, mais, il se base uniquement sur sa formation et son expérience dans la matière. 
+
+Manque dans la définition de strie : dans la définition des traces striées ou glissées, la théorie de l’identification adoptée par l’AFTE [AFTE, 1998] a défini la strie, qui est le seul descripteur des caractéristiques individuelles laissées sur un projectile, comme étant une variation dans le contour « Striation : Contour  variations, generally microscopic, on the surface of an object caused by a combination of force and motion where the motion is approximately parallel to the plane being marked ». Cette définition est relativement vague, car elle fait appel à un terme, à savoir le contour, qui n’a pas encore une définition exacte, d’autant plus que le contour est utilisé plutôt dans les traces moulées pour délimiter des régions bien précises telles que les traces du percuteur, de l’éjecteur ou de la tête de culasse,  et non pas dans les traces glissées, où l’aspect région est absent, et qui est remplacé par la texture.  
+
+Ce manque de précision dans la définition de la strie a permis à la subjectivité d’occuper une place importante dans la partie technique de l’expertise balistique, à savoir la comparaison optique, après s’être  approprier toute la partie interprétation. Il y a une différence entre la réalité d’une strie comme étant un arrangement connexe de crêtes, réparties sur une direction, et son aspect visuel qui apparait comme une forme rectiligne brillante ou sombre selon le type et l’angle d’éclairage et le grossissement utilisés. 
+
+De ce qui précède, et dans l’optique de la définition proposée de la signature balistique, il est judicieux de proposer une nouvelle approche pour l’identification des projectiles. 
+
+*Les caractéristiques de classe mesurées sur un projectile sont, le nombre et l’orientation des impressions de champs et leurs largeurs.*
+
+*Les caractéristiques discriminantes révélées sur un projectile sont l’ensemble des textures directionnelles réparties sur les impressions de champs et éventuellement sur les impressions de rayures.*
+
+*Pour conclure qu’une arme suspectée d’avoir tiré un projectile est la plus probable, parmi toutes les armes saisies dans une base de données, il faut satisfaire les deux conditions suivantes :*
+
+-	*Une compatibilité dans toutes les caractéristiques de classe entre les projectiles issus des tirs de test et ce projectile ;*
+
+-	*Le degré de compatibilité dans la comparaison des caractéristiques discriminantes entre ce projectile et les projectiles de test de cette arme, doit être supérieur à tous les degrés de compatibilité dans la comparaison des caractéristiques discriminantes entre ce projectile et les projectiles de test d’autres armes saisies dans une base de données, tout en étant au même niveau que la compatibilité dans la comparaison des caractéristiques disciminantes entre les projectiles de test de l’arme suspecte.*
+
+*Pour conclure que deux projectiles sont probablement tirés par la même arme inconnue, il faut satisfaire les deux conditions suivantes :*
+
+-	*Une compatibilité dans toutes les caractéristiques de classe ;*
+
+-	*Le degré de compatibilité dans la comparaison des caractéristiques individuelles entre les deux projectiles doit être supérieur à tous les degrés de compatibilité dans la comparaison des caractéristiques individuelles entre chacun des deux projectiles et les projectiles de test des autres armes saisies dans une base de données.   Dans les deux cas, le taux de compatibilité est égal au degré de compatibilité dans les caractéristiques individuelles.*
+
+L’avantage de cette nouvelle approche de discrimination est qu’elle est plus pratique et plus réaliste que la théorie d’identification de l’AFTE, notamment grâce aux points suivants :
+
+-	Elle utilise un descripteur (les textures directionnelles) de caractéristiques discriminantes plus représentatif que celui utilisé par la théorie de l’AFTE (les stries claires horizontales) dans la comparaison entre les projectiles.
+
+-	Au lieu de donner, après la réalisation de la comparaison seulement entre les projectiles de test et le projectile récupéré, une identification formelle que l’arme suspecte a tiré le projectile en question et que l’hypothèse qu’une autre arme, parmi toutes les armes potentielles au monde, est pratiquement impossible, l’approche proposée exprime la relation de causalité entre l’arme suspecte et le projectile en question sous forme de rapport de vraisemblance, après avoir comparé objectivement ce projectile avec toutes les armes potentielles saisies dans une base de données. Le choix d’une approche probabiliste, au lieu de l’approche déterministe utilisée par la théorie de l’AFTE, est dicté par la nature de l’empreinte balistique, car cette dernière, contrairement à l’empreinte digitale et l’empreinte génétique qui sont représentées par des descripteurs bien définis et stables, varie continuellement pour la même arme et que son descripteur (textures directionnelles) varie d’une arme à l’autre.
+
+-	Le taux d’erreur conjoint à une identification réalisée peut être exprimé par la proportion des faux positifs observés dans la comparaison entre les tirs de test des différentes armes saisies dans la base de données. De même, le taux d’erreur conjoint à une exclusion conclue peut être présenté par le pourcentage de faux négatif observé dans les comparaisons effectuées entre les projectiles tirés par les mêmes armes.   
+
+Dans une affaire impliquant l’utilisation d’une arme à feu, il existe généralement au moins une arme suspectée d’avoir tiré un indice balistique (douille ou projectile) récupéré des lieux. Les enquêteurs veulent vérifier, par le biais d’une expertise balistique, si l’arme suspecte est à l’origine des traces individuelles révélées sur l’indice balistique, et il est très rare, de présenter devant un tribunal un indice balistique sans la présence d’au moins une arme suspecte.  Donc, dans un cas criminel, de conclure une identification (ou exclusion) entre deux indices il est sous-entendu de confirmer (ou infirmer) qu’une arme suspectée a tiré un indice. L’intérêt de l’approche proposée par rapport à la théorie d’identification de l’AFTE, réside dans le fait qu’elle a remplacé les deux conditions de cette théorie, par deux autres conditions plus pertinentes et plus applicables.     
+
+## 	Algorithme développé pour l’extraction de l’empreinte balistique
+
+Étant donné que le but de cette recherche est le développement d’un système de discrimination automatique de projectile et que la nouvelle proposition de la signature balistique indique que le descripteur des caractéristiques discriminantes laissées par un canon est l’ensemble des textures directionnelles réparties sur les impressions de champs, et que les textures non directionnelles sont considérées comme un bruit, il est judicieux de mettre en œuvre un algorithme pour l’extraction automatique  des textures directionnelles par l’élimination des textures non-directionnelles.
+
+Afin de réaliser l’extraction des textures directionnelles une chaine de traitement automatique, composé de plusieurs opérations et transformations, a été adopté. La figure N°2 représente les différentes étapes du traitement automatique.
+
+ L’entrée de cette chaine, est une image optique 2D en niveau de gris de l’impression de champs. Le choix de l’imagerie optique 2D a été forcé par le fait qu’elle est la seule technique à disposition du soussigné au niveau du département balistique de  l’Institut National de Criminalistique et de Criminologie de la Gendarmerie Nationale (INCC/GN). Cette image, de taille de 3 méga pixels ( 2048 x 1436), à 8 bit, est obtenue par la camera Leica DFC 290  du macroscope comparateur Leica FS C et avec un grossissement de x40.
+ 
+Afin d’éliminer les formes verticales, car a priori ,elles ne proviennent pas du frottement entre le projectile et le champs du canon,  une décomposition par la transformée par ondelettes Haar 2D, par l'utilisation de  est appliquée sur l’image originale. La figure \ref{fig:decomwave} illustre la décomposition, a un niveau,  de la figure \ref{fig:LEA3} en ces  4 composantes, à savoir  approximation, verticale, horizontale et diagonale.
+
+
+
+
+```{r decomwave, fig.cap= "dcomposition à 1 niveau de l'image par ondelettes 2D à ces 4 composantes", out.width="550pt",  fig.align = 'center', echo=FALSE}
+knitr::include_graphics(path = "texture image after decompostion.png")
+```
+
+\newpage
+# bibliographie

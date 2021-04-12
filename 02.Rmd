@@ -1,0 +1,56 @@
+---
+title: "02-experimental"
+author: "Hassen"
+date: "01/04/2021"
+
+output:
+  rmarkdown::pdf_document
+    
+    
+header-includes:
+    - \usepackage{booktabs}
+    - \usepackage{caption}
+    - \usepackage{hhline}
+    - \usepackage{longtable}
+    - \usepackage{array}
+    - \usepackage{multirow}
+    - \usepackage{wrapfig}
+    - \usepackage{float}
+    - \usepackage{colortbl}
+    - \usepackage{pdflscape}
+    - \usepackage{tabu}
+    - \usepackage{threeparttable}
+    - \usepackage{threeparttablex}
+    - \usepackage[normalem]{ulem}
+    - \usepackage{makecell}
+    - \usepackage{xcolor}
+    - \usepackage{placeins}
+    - \usepackage{enumitem}
+    - \usepackage{nicefrac}
+  
+---
+```{r, echo=FALSE}
+library(cowplot)
+library(ggplot2)
+```
+\newpage
+
+```{r LEA1, fig.cap= "des stries claires et de la texture dans une impression de champs", echo=FALSE, eval=TRUE}
+ggdraw() + draw_image("Image1.png", scale=0.9)
+```
+
+```{r LEA2, fig.cap= " Stries claires melangées avec la texture  ", echo=FALSE}
+p2 <- ggdraw() + draw_image("Image2.png", scale=0.9)
+plot_grid(p2)
+```
+
+```{r LEA3, fig.cap= " Stries claires melangées avec la texture  ", echo=FALSE, eval=TRUE}
+p3 <- ggdraw() + draw_image("Image2.png", scale=0.9)
+plot_grid(p3)
+```
+
+
+dkajghékaghdfa
+
+\FloatBarrier
+
