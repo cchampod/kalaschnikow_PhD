@@ -191,7 +191,7 @@ Dans ses  articles [@RN8356] [@RN3872], Schwartz a énuméré trois sources maje
 - l’absence de tests de compétences adéquats dans le domaine de l’identification d’armes à feu et traces d’outils.
 Ces points ont été considérés par Schwartz, comme des arguments solides pour exclure l’admissibilité des rapports d’identification d’armes à feu et de traces d’outils devant la cour. 
 
-Afin de défendre l’admissibilité du domaine de l’identification d’armes à feu et de traces d’outils et de faire face aux critiques de Schwartz,  [@RN5455], s’est  appuyé sur les travaux de recherche empiriques réalisés dans les différents sujets critiqués par Schwartz, à savoir, le principe de l’identification, les caractéristiques de sous-classe, la variabilité des caractéristiques individuelles, et les tests de performance.  Pour minimiser l’aspect subjectif de la discipline, Nichols a souligné que les critères de l’identification sont à la fois subjectifs et objectifs. Car, pour lui, dans l’identification l’expert donne une interprétation subjective à ses objectives observations. Quant à la différence de la meilleure ressemblance entre les traces de différents outils (*Best-known nonmatch)* chez les différents experts, Nichols argumente que les tests de compétence montrent qu’elle est légère et insignifiante. 
+Afin de défendre l’admissibilité du domaine de l’identification d’armes à feu et de traces d’outils et de faire face aux critiques de Schwartz,  [@RN5455], s’est  appuyé sur les travaux de recherche empiriques réalisés dans les différents sujets critiqués par Schwartz, à savoir, le principe de l’identification, les caractéristiques de sous-classe, la variabilité des caractéristiques individuelles, et les tests de performance.  Pour minimiser l’aspect subjectif de la discipline, Nichols a souligné que les critères de l’identification sont à la fois subjectifs et objectifs. Car, pour lui, dans l’identification l’expert donne une interprétation subjective à ses objectives observations. Quant à la différence de la meilleure ressemblance entre les traces de différents outils (*Best-known nonmatch*) chez les différents experts, Nichols argumente que les tests de compétence montrent qu’elle est légère et insignifiante. 
 
 ### Rapports du National Research Council
 
@@ -306,9 +306,9 @@ Il est utile de soulever les trois points suivants :
 
 - Dans une échelle d’observation donnée, les textures orientées sont dues principalement aux frottements du projectile avec d’autres surfaces (entre autres, les champs et les rayures du canon), et que les textures non-directionnelles représentent généralement l’état brut de la surface du projectile après son usinage.
 
-À partir de ce constat, le sousigné propose une nouvelle définition de l’empreinte balistique observée dans une impression de champ, comme étant l’ensemble de stries et des textures orientées, incluses entre les deux bords de l’impression de champs. L’ensemble de stries et des textures orientées sont dues aux différents contacts entre le projectile et d’autres objets (entre autres, le champ du canon).
+À partir de ce constat, le sousigné propose une nouvelle définition de la signature balistique observée dans une impression de champ, comme étant l’ensemble de stries et des textures orientées, incluses entre les deux bords de l’impression de champs. L’ensemble de stries et des textures orientées sont dues aux différents contacts entre le projectile et d’autres objets (entre autres, le champ du canon).
 
-Donc, l’empreinte balistique dans sa nouvelle définition est le résultat de  la superposition des stries et des textures orientées laissées par le champ durant la balistique intérieure, et des stries et des textures orientées laissées par d’autres objets rencontrées  durant la balistique extérieure et la balistique finale, et éventuellement avant le le tir.  
+Donc, la signature balistique dans sa nouvelle définition est le résultat de  la superposition des stries et des textures orientées laissées par le champ durant la balistique intérieure, et des stries et des textures orientées laissées par d’autres objets rencontrées  durant la balistique extérieure et la balistique finale, et éventuellement avant le le tir.  
 
 
 ```{r tableau2, echo=FALSE}
@@ -384,8 +384,6 @@ Afin de réaliser l’extraction des textures directionnelles une chaine de trai
  L’entrée de cette chaine, est une image optique 2D en niveau de gris de l’impression de champs. Le choix de l’imagerie optique 2D a été forcé par le fait qu’elle est la seule technique à disposition du soussigné au niveau du département balistique de  l’Institut National de Criminalistique et de Criminologie de la Gendarmerie Nationale (INCC/GN). Cette image, de taille de 3 méga pixels ( 2048 x 1436), à 8 bit, est obtenue par la camera Leica DFC 290  du macroscope comparateur Leica FS C et avec un grossissement de x40.
  
 Afin d’éliminer les formes verticales, car a priori ,elles ne proviennent pas du frottement entre le projectile et le champs du canon,  une décomposition par la transformée par ondelettes Haar 2D, par l'utilisation de  est appliquée sur l’image originale. La figure \ref{fig:decomwave} illustre la décomposition, a un niveau,  de la figure \ref{fig:LEA3} en ces  4 composantes, à savoir  approximation, verticale, horizontale et diagonale.
-
-
 
 
 ```{r decomwave, fig.cap= "dcomposition à 1 niveau de l'image par ondelettes 2D à ces 4 composantes", out.width="550pt",  fig.align = 'center', echo=FALSE}
