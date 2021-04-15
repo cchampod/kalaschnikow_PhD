@@ -5,16 +5,22 @@ title: "L’ÉVALUATION D’UNE NOUVELLE DÉFINITION DE L’IDENTIFICATION AUTOM
 author: "Hassen Djadja"
 output:
   rmarkdown::pdf_document
+  
 bibliography: book.bib
 
 
              
 ---
 
+```{r setup, include=FALSE , eval=TRUE}
+knitr::opts_chunk$set(echo = FALSE, message=FALSE, warning=FALSE, fig.height=4, fig.width=8)
+```
+
 ```{r, echo=FALSE}
 library(cowplot)
 library(ggplot2)
 ```
+
 
 \newpage
 
@@ -270,32 +276,37 @@ Où: $\ Signature$ $\ balistique|_{AFTE} =$\ $\ Stries$ $\ horizontales$ $\ clai
 $\ Bruit$ $\ de$ $\ fond|_{AFTE}=$ $\ Stries$ $\ horizontales$ $\ sembres$ $\ et$ $\ Textures$ $\ orientées$  $\ et$ $\ Textures$ $\ non$ $\ directionnelles$
 
 
-
-```{r LEA1, fig.cap= "des stries claires et de la texture dans une impression de champs",  echo=FALSE}
-knitr::include_graphics(path = "images/stries_netes.png")
+```{r LEA1, fig.cap= "des stries claires et de la texture dans une impression de champs\\label{fig:strieNetes}", echo=FALSE, eval=TRUE}
+p1 <- ggdraw() + draw_image("images/stries_netes.png", scale=1)
+plot_grid(p1)
 ```
 
 
-```{r LEA2, fig.cap= "Stries claires melangées avec la texture", echo=FALSE}
-knitr::include_graphics(path = "images/stries_et_textures_directionnelles1.png")
+```{r LEA2, fig.cap= "Stries claires melangées avec la texture\\label{fig:strieandtexture}", echo=FALSE, eval=TRUE}
+p1 <- ggdraw() + draw_image("images/stries_et_textures_directionnelles1.png", scale=1)
+plot_grid(p1)
 ```
 
 
-```{r LEA3, fig.cap= "Stries claires et texture directionnelle", echo=FALSE}
-knitr::include_graphics(path = "images/textures_directionnelles.png")
+```{r LEA3, fig.cap= "Stries claires et texture directionnelle\\label{fig:texturdirectionel}", echo=FALSE, eval=TRUE}
+p1 <- ggdraw() + draw_image("images/textures_directionnelles.png", scale=1)
+plot_grid(p1)
 ```
 
 
-```{r LEA4, fig.cap= "Stries claires noyées dans la texture", echo=FALSE}
-knitr::include_graphics(path = "images/stries_noyes_dans_la_texture.png")
+```{r LEA4, fig.cap= "Stries claires noyées dans la texture\\label{fig:texturmorstrie}", echo=FALSE, eval=TRUE}
+p1 <- ggdraw() + draw_image("images/stries_noyes_dans_la_texture.png", scale=1)
+plot_grid(p1)
 ```
 
 
-```{r LEA5, fig.cap= "Omnipresence de la texture directionnelle et non directionnelles", echo=FALSE}
-knitr::include_graphics(path = "images/tres_peu_stries.png")
+```{r LEA5, fig.cap= "Omnipresence de la texture directionnelle et non directionnelles\\label{fig:almosttexture}", echo=FALSE, eval=TRUE}
+p1 <- ggdraw() + draw_image("images/tres_peu_stries.png", scale=1)
+plot_grid(p1)
 ```
 
-La figure \ref{fig:LEA1} est un exemple pour l'omniprésence des stries sur toute l'impression de champs. La figure \ref{fig:LEA2} donne un exemple ou les stries sont noyées dans la texture. les figures \ref{fig:LEA3} et \ref{fig:LEA4} illustrent les textures directionnelles. La figure  \ref{fig:LEA5} est un exemple de la dominance des textures directionnelles et non directionnelles  au détriment des stries conventionnelles.
+
+La figure \ref{fig:strieNetes} est un exemple pour l'omniprésence des stries sur toute l'impression de champs. La figure \ref{fig:strieandtexture} donne un exemple ou les stries sont noyées dans la texture. les figures \ref{fig:texturdirectionel} et \ref{fig:texturmorstrie} illustrent les textures directionnelles. La figure  \ref{fig:almosttexture} est un exemple de la dominance des textures directionnelles et non directionnelles  au détriment des stries conventionnelles.
 
 
 Il est utile de soulever les trois points suivants :
@@ -310,6 +321,7 @@ Il est utile de soulever les trois points suivants :
 
 Donc, la signature balistique dans sa nouvelle définition est le résultat de  la superposition des stries et des textures orientées laissées par le champ durant la balistique intérieure, et des stries et des textures orientées laissées par d’autres objets rencontrées  durant la balistique extérieure et la balistique finale, et éventuellement avant le le tir.  
 
+\newpage
 
 ```{r tableau2, echo=FALSE}
   tab<-data.frame(
@@ -381,13 +393,52 @@ Dans une affaire impliquant l’utilisation d’une arme à feu, il existe gén�
 
 Afin de réaliser l’extraction des textures directionnelles une chaine de traitement automatique, composé de plusieurs opérations et transformations, a été adopté. La figure N°2 représente les différentes étapes du traitement automatique.
 
- L’entrée de cette chaine, est une image optique 2D en niveau de gris de l’impression de champs. Le choix de l’imagerie optique 2D a été forcé par le fait qu’elle est la seule technique à disposition du soussigné au niveau du département balistique de  l’Institut National de Criminalistique et de Criminologie de la Gendarmerie Nationale (INCC/GN). Cette image, de taille de 3 méga pixels ( 2048 x 1436), à 8 bit, est obtenue par la camera Leica DFC 290  du macroscope comparateur Leica FS C et avec un grossissement de x40.
+ L’entrée de cette chaine est une image optique 2D en niveau de gris de l’impression de champs. Le choix de l’imagerie optique 2D a été forcé par le fait qu’elle est la seule technique à disposition du soussigné au niveau du département balistique de  l’Institut National de Criminalistique et de Criminologie de la Gendarmerie Nationale (INCC/GN). Cette image, de taille de 3 mégas pixels ( 2048 x 1536), à 8 bits, est obtenue par la camera Leica DFC 290  du macroscope comparateur Leica FS C et avec un grossissement de x40.
  
-Afin d’éliminer les formes verticales, car a priori ,elles ne proviennent pas du frottement entre le projectile et le champs du canon,  une décomposition par la transformée par ondelettes Haar 2D, par l'utilisation de  est appliquée sur l’image originale. La figure \ref{fig:decomwave} illustre la décomposition, a un niveau,  de la figure \ref{fig:LEA3} en ces  4 composantes, à savoir  approximation, verticale, horizontale et diagonale.
+Afin d’éliminer les formes verticales, car a priori ,elles ne proviennent pas du frottement entre le projectile et le champ du canon,  une décomposition à cinq niveaux  par la transformée par odelettes 2D,  est appliquée sur l’image originale. La figure \ref{fig:Original} représente une image d'une impression de champs non traitée. La figure \ref{fig:nonDirectionel} représente l'image de la texture non directionnelle obtenue après la reconstruction par l'utilisation des composantes verticales issues la décomposition, par odelette de *Haar*, de l'image originale. La figure La figure \ref{fig:Directionel} représente l'image de la texture directionnelle obtenue de la reconstitution à partir  des composantes horizontales et diagonales issue de la  décomposition par odelette de *Haar* de l'image originale.  La figure La figure \ref{fig:compDirectionel} représente l'image complémentaire de l'image de la texture directionnelle. 
+
+Afin de vérifier qu’une ligne appartient à une texture, un filtrage par la transformée par ondelette de Haar est appliqué sur cette ligne  afin d’éliminer les 
+coefficients du troisième niveau. La figure \ref{fig:denoising} illustre un exemple de ce traitement, où la courbe rouge représente le signal initial et la courbe mauve représente le résultat  du filtrage. 
 
 
-```{r decomwave, fig.cap= "dcomposition à 1 niveau de l'image par ondelettes 2D à ces 4 composantes", out.width="550pt",  fig.align = 'center', echo=FALSE}
-knitr::include_graphics(path = "images/texture_image_after_decompostion.png")
+```{r ORIG, fig.cap= "Image originale d'une impression de champs\\label{fig:Original}", echo=FALSE, eval=TRUE}
+p1 <- ggdraw() + draw_image("images/original.png", scale=1)
+plot_grid(p1)
+```
+
+
+```{r TEXND, fig.cap= "Texture non directionnelle de l'image originale\\label{fig:nonDirectionel}", echo=FALSE, eval=TRUE}
+p1 <- ggdraw() + draw_image("images/NonDirectionelTexture.png", scale=1)
+plot_grid(p1)
+```
+
+
+```{r TEXD, fig.cap= "Texture directionnelle de l'image originale\\label{fig:Directionel}", echo=FALSE, eval=TRUE}
+p1 <- ggdraw() + draw_image("images/DirectionelTexture.png", scale=1)
+plot_grid(p1)
+```
+
+
+
+```{r CTEXD, fig.cap= "image complementaire de la texture directionnelle\\label{fig:compDirectionel}", echo=FALSE, eval=TRUE}
+p1 <- ggdraw() + draw_image("images/complementDirectionelTexture.png", scale=1)
+plot_grid(p1)
+```
+
+
+Afin de vérifier qu’une ligne appartient à une texture, un filtrage par la transformée par ondelette de Haar est appliqué sur cette ligne  afin d’éliminer les 
+coefficients du troisième niveau. La figure \ref{fig:denoising} illustre un exemple de ce traitement, où la courbe rouge représente le signal initial et la courbe mauve représente le résultat  du filtrage. 
+
+Pour qu’une ligne fait part à une texture elle doit vérifier deux conditions : perceptible avec moins de variabilité dans l’intensité. Pour ce faire, un filtrage par la transformée par ondelette de Haar est appliqué sur cette ligne  afin d’éliminer les coefficients du troisième niveau. La figure illustre un exemple de ce traitement, où la courbe rouge représente le signal initial et la courbe mauve représente le résultat  du filtrage. Si la ligne satisfait la condition  elle va être remplacé par un pixel ayant la valeur moyen des 32 pixels, sinon elle va être remplacer par un pixel noir. de ce fait, chaque bande va être remplacer par un vecteur de 1356 pixels et l’image de la texture directionnelle  va être représenté par une image compressée de la texture directionnelle d’une taille de 64 x 1536 pixels.  La  figure \ref{fig:zipedTexcture} illustre les étapes utilisées pour le passage de l’image de la texture directionnelle vers l’image compressée de la texture.
+
+```{r signal, fig.cap= "filtrage d'un signal de 32 pixels\\label{fig:denoising}", echo=FALSE, eval=TRUE}
+p1 <- ggdraw() + draw_image("images/signal and denosing signal.png", scale=1)
+plot_grid(p1)
+```
+
+
+```{r zipedTexcture, out.height = "100%", out.width='100%',fig.cap="Processus de compression de l’image de texture directionnelle", echo=F}
+knitr::include_graphics( path = "image compresée de la texture directionnelle.pdf")
 ```
 
 \newpage
