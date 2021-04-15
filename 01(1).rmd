@@ -1,0 +1,49 @@
+---
+title: '1'
+author: "Hassen"
+date: "11/04/2021"
+output:  
+ rmarkdown::pdf_document
+        
+tables: true
+
+---
+
+```{r setup, include=FALSE , eval=TRUE}
+knitr::opts_chunk$set(echo = FALSE, message=FALSE, warning=FALSE, fig.height=4, fig.width=8)
+```
+
+```{r, echo=FALSE}
+library(cowplot)
+library(ggplot2)
+```
+
+
+```{r eval=FALSE}
+knitr::knit_hooks$set(plot = function(x, options)  {
+     knitr::hook_plot_tex(x, options)
+})
+```
+\newpage
+
+```{r fig1, fig.cap= "des stries claires et de la texture dans une impression de champs", fig.pos='h', echo=FALSE}
+knitr::include_graphics(path = "images/stries_et_textures_directionnelles1.png")
+```
+
+```{r fig2, fig.cap= "des stries claires et de la texture dans une impression de champs", fig.pos='h', echo=FALSE}
+knitr::include_graphics(path = "images/stries_et_textures_directionnelles1.png")
+```
+
+
+```{r LEA1, fig.cap= "des stries claires et de la texture dans une impression de champs", echo=FALSE, eval=TRUE}
+p1 <- ggdraw() + draw_image("images/stries_et_textures_directionnelles1.png", scale=1)
+plot_grid(p1)
+```
+
+
+```{r LEA2, fig.cap= "des stries claires et de la texture dans une impression de champs\\label{fig:hassen}", echo=FALSE, eval=TRUE}
+p1 <- ggdraw() + draw_image("images/stries_et_textures_directionnelles1.png", scale=1)
+plot_grid(p1)
+```
+
+la figure \ref{fig:hassen} est dfdfdfd
