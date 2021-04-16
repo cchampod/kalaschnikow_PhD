@@ -3,14 +3,23 @@ title: "L’ÉVALUATION D’UNE NOUVELLE DÉFINITION DE L’IDENTIFICATION AUTOM
 
        
 author: "Hassen Djadja"
+  
 output:
   rmarkdown::pdf_document
-  
+toc_float: true
+lot: true
+lof: true  
 bibliography: book.bib
 
 
              
 ---
+```{=latex}
+% Trigger ToC creation in LaTeX
+\renewcommand{\baselinestretch}{1}\normalsize
+\tableofcontents
+\renewcommand{\baselinestretch}{1}\normalsize
+```
 
 ```{r setup, include=FALSE , eval=TRUE}
 knitr::opts_chunk$set(echo = FALSE, message=FALSE, warning=FALSE, fig.height=4, fig.width=8)
@@ -215,7 +224,7 @@ Le tableau ci-dessous dresse les plus importants travaux de recherche effectués
 
 
 ```{r out.height = "95%", out.width='100%',fig.cap="Techniques utilsées dans la literature pour l'acquisition, l'extraction de signature et la discrimination", echo=F}
-knitr::include_graphics( path = "diag_tech.pdf")
+knitr::include_graphics( path = "images/diag_tech.pdf")
 ```
 
  \tiny
@@ -429,7 +438,7 @@ plot_grid(p1)
 Afin de vérifier qu’une ligne appartient à une texture, un filtrage par la transformée par ondelette de Haar est appliqué sur cette ligne  afin d’éliminer les 
 coefficients du troisième niveau. La figure \ref{fig:denoising} illustre un exemple de ce traitement, où la courbe rouge représente le signal initial et la courbe mauve représente le résultat  du filtrage. 
 
-Pour qu’une ligne fait part à une texture elle doit vérifier deux conditions : perceptible avec moins de variabilité dans l’intensité. Pour ce faire, un filtrage par la transformée par ondelette de Haar est appliqué sur cette ligne  afin d’éliminer les coefficients du troisième niveau. La figure illustre un exemple de ce traitement, où la courbe rouge représente le signal initial et la courbe mauve représente le résultat  du filtrage. Si la ligne satisfait la condition  elle va être remplacé par un pixel ayant la valeur moyen des 32 pixels, sinon elle va être remplacer par un pixel noir. de ce fait, chaque bande va être remplacer par un vecteur de 1356 pixels et l’image de la texture directionnelle  va être représenté par une image compressée de la texture directionnelle d’une taille de 64 x 1536 pixels.  La  figure \ref{fig:zipedTexcture} illustre les étapes utilisées pour le passage de l’image de la texture directionnelle vers l’image compressée de la texture. l’image complémentaire de la texture directionnelle sert à détecter les textures directionnelles sombres non prise en considération lors du traitement de l’image de la texture directionnelle  
+Pour qu’une ligne fait part à une texture elle doit vérifier deux conditions : perceptible avec moins de variabilité dans l’intensité.  Si la ligne satisfait ces conditions  elle va être remplacé par un pixel ayant la valeur moyen des 32 pixels, sinon elle va être remplacer par un pixel noir. de ce fait, chaque bande va être remplacer par un vecteur de 1356 pixels et l’image de la texture directionnelle  va être représenté par une image compressée de la texture directionnelle d’une taille de 64 x 1536 pixels.  La  figure \ref{fig:zipedTexctureProcess} illustre les étapes utilisées pour le passage de l’image de la texture directionnelle vers l’image compressée de la texture. l’image complémentaire de la texture directionnelle sert à détecter les textures directionnelles sombres non prise en considération lors du traitement de l’image de la texture directionnelle.  
 
 ```{r signal, fig.cap= "filtrage d'un signal de 32 pixels\\label{fig:denoising}", echo=FALSE, eval=TRUE}
 p1 <- ggdraw() + draw_image("images/signal and denosing signal.png", scale=1)
@@ -437,9 +446,39 @@ plot_grid(p1)
 ```
 
 
-```{r zipedTexcture, out.height = "100%", out.width='100%',fig.cap="Processus de compression de l’image de texture directionnelle", echo=F}
-knitr::include_graphics( path = "image compresée de la texture directionnelle.pdf")
+```{r zipedTexctureProcess, out.height = "100%", out.width='100%',fig.cap="Processus de compression de l’image de texture directionnelle", echo=F}
+knitr::include_graphics( path = "images/compression de la texture directionnelle.pdf")
 ```
+
+
+
+
+```{r TEXDandzip, fig.cap= "Texture directionnelle et son image compréssée\\label{fig:Directionel_and_zip}", echo=FALSE, eval=TRUE}
+p1 <- ggdraw() + draw_image("images/DirectionelTexture.png", scale=1)
+p2 <- ggdraw() + draw_image("images/compressed texture image.png", scale=0.74)
+plot_grid(p1,p2)
+```
+
+
+```{r CTEXDandzip, fig.cap= "Complement de la texture directionnelle  et son image compréssée\\label{fig:CompDirectionel_and_zip}", echo=FALSE, eval=TRUE}
+p1 <- ggdraw() + draw_image("images/ComplementDirectionelTexture.png", scale=1)
+p2 <- ggdraw() + draw_image("images/compressed complement texture image.png", scale=0.74)
+plot_grid(p1,p2)
+```
+
+
+
+```{r zipedTexcture, out.height = "100%", out.width='100%',fig.cap="Image compressée de la texture directionnelle", echo=F, eval=FALSE}
+knitr::include_graphics( path = "images/compressed texture image.png")
+```
+
+
+
+```{r zipedCompTexcture, out.height = "100%", out.width='100%',fig.cap="Image compressée du complement de la texture directionnelle", echo=F, eval=FALSE}
+knitr::include_graphics( path = "images/compressed complement texture image.png")
+```
+
+les figures \ref{fig:Directionel_and_zip} et \ref{fig:CompDirectionel_and_zip} représentent respectivement les la texture directionnelle et son image compressée ainsi que le complément de la texture directionnelle et son image compressée.
 
 \newpage
 # bibliographie
