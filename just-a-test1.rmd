@@ -1,19 +1,30 @@
 ---
-title: "L’ÉVALUATION D’UNE NOUVELLE DÉFINITION DE L’IDENTIFICATION AUTOMATIQUE DE PROJECTILES SOUS UNE APPROCHE DE RAPPORT DE VRAISEMBLANCE    Mémoire"
+title: |
+   
+   ***Université de Lausanne***
+     
+      *Faculté de Droit, des Sciences Criminelles et d'Administration Publique*
+      
+      *École des Sciences Criminelles* 
+      
+      <center>*Institut de Police Scientifique*</center>
+      
+      ![]( images/titlepage.png) 
+      
+      <center>*Hassen Djadja*</center>
+      <center>ÉVALUATION D’UNE NOUVELLE DEFINITION DE LA DISCRIMINATION AUTOMATIQUE DE PROJECTILES SOUS UNE APPROCHE DE RAPPORT DE VRAISEMBLANCE</center>
+   
+      <center>*Mémoire intermédiaire*</center>
+      
+      <center>*Mai 2021*</center>
 
-       
-author: "Hassen Djadja"
-  
 output:
   rmarkdown::pdf_document:
-  header-includes:
-   - \usepackage[french]{babel}
-     
+  
+      
 
- 
 
 bibliography: book.bib
-             
 ---
 
 ```{r setup, include=FALSE , eval=TRUE}
@@ -33,7 +44,17 @@ library(gridExtra)
 \mbox{}  
 
 \tableofcontents
+
+\newpage
+\thispagestyle{empty}
+\mbox{}  
+
 \listoffigures
+
+\newpage
+\thispagestyle{empty}
+\mbox{}  
+
 \listoftables
 
 \newpage
@@ -71,7 +92,7 @@ L’objectif de ce travail est de contribuer efficacement dans la consolidation 
 
 ## Plan du document
 
-Le présent document est subdivisé en quatre chapitres. Le premier est consacré au cadre criminalistique en matière d’identification balistique en général et l’identification de projectiles en particulier, aux critiques qu’a subi ce domaine ; Les travaux de recherche réalisés dans l’automatisation de l’identification de projectile et les systèmes automatiques actuels d’identification balistique. Le deuxième chapitre explique les objectifs de la thèse. le troisième  chapitre est dédié aux exposés de motifs pour la nouvelle définition proposée de l’signature balistique ; L’approche relative à l’identification balistique ; Les algorithmes développés pour l’extraction de l’signature balistique dans sa nouvelle définition ; La modélisation d’une arme à feu, ainsi que l’identification automatique entre un projectile et une arme ou entre deux projectiles.  Le dernier chapitre détail le mode d’acquisition de projectiles, le choix des armes et l’échantillonnage, les tests de performance du système proposé, le calcul du rapport de vraisemblance et finalement il dresse une étude comparative de performences entre le système développé, le système **IBIS TRAX3D** et le système **EVOFINDER**. 
+Le présent document est subdivisé en quatre chapitres. Le premier est consacré au cadre criminalistique en matière d’identification balistique en général et l’identification de projectiles en particulier, aux critiques qu’a subi ce domaine ; Les travaux de recherche réalisés dans l’automatisation de l’identification de projectile et les systèmes automatiques actuels d’identification balistique. Le deuxième chapitre explique les objectifs de la thèse. le troisième  chapitre est dédié aux exposés de motifs pour la nouvelle définition proposée de l’signature balistique ; L’approche relative à l’identification balistique ; Les algorithmes développés pour l’extraction de l’signature balistique dans sa nouvelle définition ; La modélisation d’une arme à feu, ainsi que l’identification automatique entre un projectile et une arme ou entre deux projectiles.  Le dernier chapitre détail le mode d’acquisition de projectiles, le choix des armes et l’échantillonnage, les tests de performance du système proposé, le calcul du rapport de vraisemblance et finalement il dresse une étude comparative de performences entre le système développé, le système ***IBIS TRAX3D*** et le système ***EVOFINDER***. 
 
 \newpage
 
@@ -250,7 +271,7 @@ Dans ses deux rapports publiés, le Conseil national de recherche, [@RN5823] [@R
 
 Outre les remarques révélées par les deux précédents rapports, le rapport du PCAST [@RN9741] a mis l’accent sur le problème du manque de tests de compétence fiables nécessaires pour estimer les taux d’erreur (fausses identifications et fausses exclusions) dans les conclusions des experts balistiques, car selon ce rapport il n’existe qu’une seule  étude  pertinente qui a été réalisée [@RN99994] par laquelle un taux d’erreur de 1 sur 66 a été enregistré dans un test de compétence distribué sur 218 experts en balistique.
 
-## Travaux de recherche effectués
+## Travaux de recherche effectués sur les projectiles et les traces glissées
 
 Afin de faire face au grand nombre d’affaires cumulées au niveau des laboratoires balistiques et de répondre aux requérants en temps opportun, il serait judicieux de penser à l’automatisation des différentes étapes du processus d’analyse, à savoir, la numérisation, la comparaison et l’interprétation. Mais, après l’adoption des critères   de Daubert de l’admissibilité des expertises forensiques devant les cours, et l’ampleur des critiques envers le domaine de l’identification des armes à feu et traces d’outils, il est indispensable que la communauté des chercheurs et spécialistes en balistique réalise des études et des recherches dans le but de minimiser au maximum la subjectivité de la discipline par l’automatisation des étapes de l’analyse balistique.
 
@@ -296,11 +317,11 @@ Cette thèse à trois principaux objectifs :
     -	l’utilisation des techniques de l’apprentissage automatique dans la modélisation  des champs et des armes, et dans la discrimination.
     
 2.	Développer un système automatique de discrimination  de projectiles, au premier temps pour le calibre 7.62 x 39, au profit du département balistique de l’INCC ; 
-3.	Mener une étude comparative objective des performances entre le système de discrimination proposé , le système **IBIS TRAX3D** et le système **EVOFINDER**.
+3.	Mener une étude comparative objective des performances entre le système de discrimination proposé , le système ***IBIS TRAX3D*** et le système ***EVOFINDER***.
 
 \newpage
 
-# Contribution personnelle
+# Contribution de la thèse
 
 ## Définition proposée de la signature balistique 
 
@@ -316,7 +337,7 @@ Dans le cas d’une identification, l’examinateur argumente sa conclusion par 
 
 Dont le$\ Premier$$\ plan$ n'est rien d'autre que la signature balistique dans sa difinition actuelle de l'AFTE, à savoir les stries horizentales claires, étant donne que les stries sombres ne sont visible que sous un eclairage oposé, elles ne soient pas prises en compte.Tandis que$\ l'Arrière$$\ plan$ représente le reste de l'image de l'impression de champs, donc, l'information non pertinante vis à vis la difinition actuelle,qui se manifeste sous forme de$\ Textures$. 
 
-Les$\ Textures$ sont généralement composées de$\ Textures$$\ directionnelles$ et de$\ Textures$$\ non$$\ directionnelles$. De leur tour, les$\ Textures$$\ directionnelles$  sont composées des$\ Stries$$\ horizontales$$\ sombres$ et les$\ Textures$$\ orientées$.
+Les$\ Textures$ sont généralement composées de$\ Textures$$\ directionnelles$ et de$\ Textures$$\ non$$\ directionnelles$. De leur tour, les$\ Textures$$\ directionnelles$sont composées des$\ Stries$$\ horizontales$$\ sombres$ et les$\ Textures$$\ orientées$.
 
 De ce qui précède:
 
@@ -424,11 +445,14 @@ De ce qui précède, et dans l’optique de la définition proposée de la signa
 
     -	*Le degré de compatibilité dans la comparaison des caractéristiques discriminantes entre ce projectile et les projectiles de test de cette arme, doit être supérieur à tous les degrés de compatibilité trouvés dans la comparaison des caractéristiques discriminantes entre ce projectile et les projectiles de test des  armes saisies dans une base de données, tout en étant au même niveau que la compatibilité dans la comparaison des caractéristiques disciminantes entre les projectiles de test de l’arme suspecte.*
 
--  *Pour conclure que deux projectiles sont probablement tirés par la même arme inconnue, il faut satisfaire les deux suivantes conditions :*
+-  *Pour dire que deux projectiles sont probablement tirés par la même arme inconnue, il faut satisfaire les deux suivantes conditions :*
 
     -	*Une compatibilité dans toutes les caractéristiques de classe ;*
 
     -	*Le degré de compatibilité dans la comparaison des caractéristiques discriminantes entre les deux projectiles doit être supérieur à tous les degrés de compatibilité trouvés dans la comparaison des caractéristiques discriminantes entre chacun des deux projectiles avec les projectiles de test des autres armes saisies dans une base de données.*
+
+
+Le terme *dire* utilisé dans cette approche reflet sous-entendu une discrimination basée sur  l’application de la théorie de la décision appliquée en matière d’individualisation en criminalistique [@RN7827],  où la discrimination sera décidée sur la base du rapport entre une fausse identification et une fausse exclusion, les chances à priori   et le rapport de vraisemblance[@RN3613].
 
 L’avantage de cette nouvelle approche de discrimination est qu’elle est plus pratique et plus réaliste que la théorie d’identification de l’AFTE, notamment grâce aux points suivants :
 
@@ -486,7 +510,9 @@ La caractérisation par l’utilisation du Histogramme de gradient orienté (en 
 
 Il est utile de préciser que la fonction ***extractHOGFeatures*** de **Computer Vision Toolbox** du logiciel ***Matlab*** a été chosie pour l’extraction de caractéristiques *HOG*. Cette fonction  utilise comme entrées l’image en question et la taille de la cellule de balayage.
 
-Une cellule de taille de 24 x 16 pixels a été appliquée  sur l’image compressée de la texture directionnelle pour donner un vecteur$\ V_{1}$ de 6804 variables. Une cellule de taille de 48 x 24 pixels a été appliquée sur l’image compressée du complémentaire  de la texture directionnelle pour donner un vecteur$\ V_{2}$ de 1116  variables. La concaténation de$\ V_{1}$ et$\ V_{2}$ donne le vecteur descripteur$\ V$ de l’impression de champ, avec 7920 variables.    
+Une cellule de taille de 24 x 16 pixels a été appliquée  sur l’image compressée de la texture directionnelle pour donner un vecteur$\ V_{1}$ de 6804 variables. Une cellule de taille de 48 x 24 pixels a été appliquée sur l’image compressée du complémentaire  de la texture directionnelle pour donner un vecteur$\ V_{2}$ de 1116  variables. La concaténation de$\ V_{1}$ et$\ V_{2}$ donne le vecteur descripteur$\ V$ de l’impression de champ, avec 7920 variables.
+
+la figure \ref{fig:ProcesExtract}  recapitule les différentes étapes utilisées dans l’extraction de la signature balistique.
 
 
 Il est utile de signaler que dans les dix études de recherche pour l’automatisation de l’identification automatique, citées dans le tableu \ref{tab:tabl1}, la signature balistique de l’impression de champ a été représentée par la projection horizontale des profils de surface, sous le prétexte que les caractéristiques individuelles, à savoir les stries, sont parfaitement horizontales. Mais, même si en admettant que les stries sont parfaitement horizontales, dans la même ligne, il est fort probable qu’il existe plusieurs stries ayant des hauteurs différentes, ou des intensités différentes et avec des largeurs différentes, ce qui rend la projection horizontale peu utile, car l’information sur les distributions locales et régionales des stries sera perdue. Cependant, les stries ne sont pas nécessairement parallèles avec l’orientation du champ et il est rarement d’observer une strie qui occupe tout le long de l’impression de champ. 
@@ -529,7 +555,13 @@ img1 <-  rasterGrob(as.raster(readPNG("images/Hog extraction.png")), interpolate
 img2 <-  rasterGrob(as.raster(readPNG("images/Hog application example.png")), interpolate = FALSE)
 grid.arrange(img1, img2, ncol = 2)
 ```
- 
+
+
+```{r signatureExtraction, fig.cap= "Processus d'extraction de la signature balistique  \\label{fig:ProcesExtract}", echo=FALSE}
+p1 <- ggdraw() + draw_image("images/signature extraction.png", scale=1)
+plot_grid(p1)
+```
+
  
 ##	Modélisation de la signature balistique
 
@@ -552,7 +584,7 @@ Afin de standardiser l’acquisition des impressions de champs le suivant protoc
 
 ## Échantillonnage   
 
-Dans un premier temps, l’auteur s’est focalisé sur la pertinence de la mise en œuvre d’un système automatique d’identification de projectile sur la base de la définition proposée de l’signature balistique, de la nouvelle approche présentée de l’identification, de l’algorithme développé pour l’extraction de la signature balistique et de la modélisation supervisée des canons. 
+Dans un premier temps, le soussigné s’est focalisé sur la pertinence de la mise en œuvre d’un système automatique d’identification de projectile sur la base de la définition proposée de l’signature balistique, de la nouvelle approche présentée de l’identification, de l’algorithme développé pour l’extraction de la signature balistique et de la modélisation supervisée des canons. 
 
 Afin d’évaluer ce système, une base de données a été créée et alimentée continuellement par des armes de type Kalachnikov AK 47 de calibre 7.62 x 39, le type d’arme le plus utilisé dans les affaires criminelles, récupérées dans les différentes affaires criminelles traitées, durant les années 2016 et 2017, au niveau du département balistique de l’Institut National de Criminalistique et de Criminologie de la Gendarmerie Nationale. La majorité de ces armes ont été fabriquées avant 1990, et la plupart de ces dernières ont été fabriquées dans les années soixante-dix par différents fabricants et dans plusieurs pays, tels que la Russie, la Chine et des pays de l’Europe de l’Est. Au total, 200 armes sont actuellement saisies dans cette base de données. Cinq tirs de test ont été effectués par les 60 premières armes avec l’utilisation de munition ordinaire fabriquée par ERIS-Algérie, et six tirs de test ont été réalisés par le reste des armes avec le même type de munition. Le tableau \ref{tab:tabl3} résume le nombre de projectiles de test tirés par ces armes à feu.
 
@@ -628,7 +660,7 @@ Pour ce scénario, les trois configurations suivantes ont été onvisagées (voi
 - Troisième configuration : pour les armes (N°61 au N°200), cinq projectiles consécutifs sont réservés pour l’entrainement et un projectile est gardé dans le test.
 Le résultat de la prédiction, selon la méthode d’apprentissage choisie, est une probabilité à postériori de discrimination$\ P(H|E)$. 
 
-Pour chaque configuration, les deux cas rencontrées dans la vie pratique, à savoir  le cas où que l’arme suspecte a été saisie dans la base de données avant la commission du crime, et le cas dans lequel l’arme suspecte ne figure pas dans des armes saisies de la base de données avant la commission du crime,  ont été prise en considération.
+Pour chaque configuration, les deux cas rencontrées dans la vie pratique ont été prise en considération, à savoir  le cas où l’arme suspecte a été saisie dans la base de données avant la commission du crime, et le cas dans lequel l’arme suspecte ne figure pas dans des armes saisies de la base de données avant la commission du crime.
 
 Par exemple, l’avant dernière ligne du tableau \ref{tab:tabl5} représente le cas où cinq projectiles de référence de l’arme suspecte ont été saisi dans la base de données avant le commission du crime, dont le projectile N°6 a été récupéré,  et la dernière ligne du même tableau représente le cas où le crime a été commis, dont le projectile N°1 a été récupéré,  avant la saisi des cinq projectiles de l’arme suspecte.
 
@@ -671,6 +703,7 @@ De la même manière: $\ LR_{k} = \frac{P(E|H_{k})}{P(E|\bar{H_{k}})}=\frac{P(H_
 )
 knitr::kable(tab, caption=" Combinaisons d’évaluation du système pour le scénario projectile-arme\\label{tab:tabl5}", booktabs= TRUE)
 ```
+
 
 
 
